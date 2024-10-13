@@ -1,0 +1,30 @@
+[
+    {
+      "name": "Anby Demara",
+      "image": "/characters/AnbyDemara.png"
+    },
+    {
+      "name": "Jane Doe",
+      "image": "/characters/JaneDoe.png"
+    },
+    {
+      "name": "Wise",
+      "image": "/characters/Wise.png"
+    },
+    {
+      "name": "Belle",
+      "image": "/characters/Belle.png"
+    },
+    {
+      "name": "Corin Wickes",
+      "image": "/characters/CorinWickes.png"
+    },
+    {
+      "name": "Lucy",
+      "image": "/characters/Lucy.png"
+    },
+    {
+      "name": "Piper Wheel",
+      "image": "/characters/PiperWheel.png"
+    }
+  ]
