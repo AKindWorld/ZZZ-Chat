@@ -58,7 +58,7 @@ const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
 
 
 const UserAddedMessage = ({ message }) => <div className='rounded-full p-2 px-4 text-white '>
-    <div className='flex items-center'>
+    <div className='flex items-center place-content-center'>
       <svg className="mx-2 size-[5]" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle className="stroke-white" cx="10" cy="10" r="9" stroke="#FFF" stroke-width="2"/>
         <path className="fill-white" d="M8 4.5C8 4.22386 8.22386 4 8.5 4H11.5C11.7761 4 12 4.22386 12 4.5V11.5C12 11.7761 11.7761 12 11.5 12H8.5C8.22386 12 8 11.7761 8 11.5V4.5Z" fill="#00A2FF"/>
@@ -67,7 +67,7 @@ const UserAddedMessage = ({ message }) => <div className='rounded-full p-2 px-4 
       {message}
     </div>
   </div>;
-const UserBlockedMessage = ({ message }) => <div>{message}</div>;
+const UserSingleLineMessage = ({ message }) => <div className='text-gray-400'>{message}</div>;
 
 const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
   const [customMessage, setCustomMessage] = useState('');
@@ -75,7 +75,7 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
 
   const systemMessages = [
     { component: UserAddedMessage, props: { message: `User added you` } },
-    { component: UserBlockedMessage, props: { message: 'User blocked you' } },
+    { component: UserSingleLineMessage, props: { message: '- History -' } },
   ];
 
   const handleSelectMessage = (index) => {
@@ -98,8 +98,11 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
         <div className="">
         {editingMessageIndex === null ? (
           <div>
-            <div className='flex items-center'>
-              <h2 className="text-lg font-bold tracking-wider mb-4 text-white flex-grow">Select System Message</h2>
+            <div className='flex items-center mb-4'>
+              <div className='flex flex-grow flex-col'>
+                <h2 className="text-lg font-bold tracking-wider text-white flex-grow">Select System Message</h2>
+                <span className='text-sm text-gray-400'>You will be able to customize the message</span>
+              </div>
               <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                   <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
@@ -120,7 +123,7 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
                 return (
                   <button
                     key={index}
-                    className="w-full p-2 rounded text-left"
+                    className="w-full p-2 rounded text-center hover:text-white border-0 hover:border-0 hover:outline-none focus:outline-none active:outline-none"
                     onClick={() => handleSelectMessage(index)}
                   >
                     <Component {...Message.props} />
@@ -205,9 +208,15 @@ const EditMessageModal = ({ isOpen, onClose, onSave, messageContent }) => {
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [isGroupDM, setIsGroupDM] = useState(false);
   const [selectedSide, setSelectedSide] = useState('left');
+  const [activeSide, setActiveSide] = useState('left');
   const [leftProfile, setLeftProfile] = useState(null);
+  const [leftProfiles, setLeftProfiles] = useState([]);
   const [rightProfile, setRightProfile] = useState(null);
+  const [activeLeftCharacter, setActiveLeftCharacter] = useState(null);
+  const [activeRightCharacter, setActiveRightCharacter] = useState(rightProfile);
+  const [activeCharacter, setActiveCharacter] = useState('');
   const [leftName, setLeftName] = useState("Untitled");
   const [rightName, setRightName] = useState("Untitled");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -231,9 +240,48 @@ const App = () => {
 
   const addMessage = () => {
     if (!inputText.trim()) return;
-    setMessages([...messages, { side: selectedSide, type: 'text', content: inputText }]);
+  
+    if (isGroupDM) {
+      setMessages([...messages, { 
+        side: activeSide,
+        profile: activeSide === "left" ? activeLeftCharacter : activeRightCharacter,
+        type: 'text', 
+        content: inputText 
+      }]);
+    } else {
+      setMessages([...messages, { 
+        side: selectedSide, 
+        profile: selectedSide === 'left' ? activeLeftCharacter : activeRightCharacter,
+        type: 'text', 
+        content: inputText 
+      }]);
+      console.log(selectedSide, activeLeftCharacter, activeRightCharacter, activeCharacter);
+    }
+    
     setInputText('');
-  };
+};
+;
+  
+  
+  const handleCharacterChange = (selectedValue) => {
+    const [side, index] = selectedValue.split('-');
+    
+    if (side === 'left') {
+      const selectedProfile = leftProfiles[parseInt(index)];
+      setActiveSide('left');
+      setActiveLeftCharacter(selectedProfile);
+      setActiveCharacter(selectedValue);
+      console.log(selectedSide, activeLeftCharacter, activeRightCharacter, activeCharacter);
+    } else if (side === 'right') {
+      const selectedRightProfile = { name: rightName, image: rightProfile };
+      setActiveSide('right');
+      setActiveRightCharacter(selectedRightProfile);
+      setActiveCharacter(selectedValue);
+      console.log(selectedSide, activeLeftCharacter, activeRightCharacter, activeCharacter);
+    }
+};
+ 
+  
 
   const addSystemMessage = (MessageComponent) => {
     setMessages([...messages, { side: 'system', type: 'component', content: <MessageComponent /> }]);
@@ -276,8 +324,22 @@ const App = () => {
           sessionStorage.setItem('rightProfile', imageData);
         }
       } else {
-        setMessages([...messages, { side, type: 'image', content: imageData }]);
-      }
+          if (isGroupDM) {
+            setMessages([...messages, { 
+              side: activeSide,
+              profile: activeSide === "left" ? activeLeftCharacter : activeRightCharacter,
+              type: 'image', 
+              content: imageData 
+            }]);
+          } else {
+            setMessages([...messages, { 
+              side: selectedSide, 
+              profile: selectedSide === 'left' ? activeLeftCharacter : activeRightCharacter,
+              type: 'image', 
+              content: imageData 
+            }]);
+          }
+        }
     };
     reader.readAsDataURL(file);
   };
@@ -310,13 +372,23 @@ const App = () => {
 
   const handleSelectCharacter = (character) => {
     if (profileSide === 'left') {
-      setLeftProfile(character.image);
-      setLeftName(character.name);
+      if (isGroupDM) {
+        setLeftProfiles([...leftProfiles, character]);
+      } else {
+        setLeftProfile(character.image);
+        setLeftName(character.name);
+      }
     } else {
       setRightProfile(character.image);
       setRightName(character.name);
     }
   };
+  
+  const removeLeftProfile = (index) => {
+    const updatedProfiles = leftProfiles.filter((_, i) => i !== index);
+    setLeftProfiles(updatedProfiles);
+  };
+  
 
 
   const exportChat = () => {
@@ -441,48 +513,84 @@ const App = () => {
 
             <div className="profiles w-full lg:w-1/4 flex flex-col bg-black/80 p-4 md:mx-2 my-2 rounded-xl min-h-[90vh]">
               <div className='p-4 rounded-xl my-0 py-0'>
+              <div className='flex flex-row bg-gray-600/40 rounded-full'>
+                  <button className={`flex place-content-center w-1/3 rounded-full bg-transparent hover:bg-red-400`}>
+                    <img src="/assets/icons/ZZZ_agent_profile_icon.png" alt='Agent Profile Icon' className="w-auto auto max-h-8" />
+                  </button>
+                  <button className={`flex place-content-center w-1/3 rounded-full ${isAnimatedBackgroundEnabled && !isGroupDM ? 'animate-color-change' : !isGroupDM && !isAnimatedBackgroundEnabled ? 'bg-[#FFD613]' : 'bg-transparent'} outline-none focus:outline-none active:outline-none hover:border-[#FFD613]`} onClick={() => setIsGroupDM(false)}>
+                    <img src="/assets/icons/ZZZ_dm_icon.png" alt='Agent Profile Icon' className={`w-auto auto max-h-8 ${isGroupDM ? 'invert' : 'invert-0'}`} />
+                  </button>
+                  <button className={`flex place-content-center w-1/3 rounded-full ${isAnimatedBackgroundEnabled && isGroupDM ? 'animate-color-change' : isGroupDM && !isAnimatedBackgroundEnabled ? 'bg-[#FFD613]' : 'bg-transparent'} outline-none focus:outline-none active:outline-none hover:border-[#FFD613]`} onClick={() => setIsGroupDM(true)}>
+                    <img src="/assets/icons/ZZZ_group_chat_icon.png" alt='Agent Profile Icon' className={`w-auto auto max-h-8 ${!isGroupDM ? 'invert' : 'invert-0'}`} />
+                  </button>
+              </div>
               <div class="flex items-center py-4">
                 <div class="flex-grow h-px bg-gray-400"></div> 
                 <span class="flex-shrink text-md text-gray-500 px-4 font-light">Choose</span>
                 <div class="flex-grow h-px bg-gray-400"></div>
               </div>
                 <h3 className='py-2 font-medium text-white/50'>Messaging</h3>
-                {leftProfile ? (
-                  <button onClick={() => openCharacterModal('left')} className={`group flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
-                    <div className='flex items-center rounded-full'>
-                      <img src={leftProfile} alt={leftName} className="w-12 h-12 rounded-full" />
-                      <div className='flex flex-col text-left ml-4'>
-                        <span className='text-xl'>{leftName}</span>
-                        <span className='text-sm text-gray-500/60 block group-hover:hidden'>
-                          {leftName === 'Untitled' ? 'Click to switch' : 
-                            ((message) => {
-                              const lastMessage = messages.filter(message => message.side === 'left' && message.type === 'text').pop()?.content || '';
-                              return lastMessage.length > 15 ? lastMessage.substring(0, 15) + '...' : lastMessage;
-                            })()
-                          }
-                        </span>
-                        <span className='text-sm text-gray-500/60 hidden group-hover:block'>Click to switch</span>
-                      </div>
+                {isGroupDM ? (
+                  <div>
+                    <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
+                      {leftProfiles.length === 0 && <p className="text-white/50 col-span-3 md:col-span-4">No profiles yet. Click + to add.</p>}
+                      {leftProfiles.map((profile, index) => (
+                        <div key={index} className="relative group">
+                          <img src={profile.image} alt={profile.name} className="w-16 h-16 rounded-full border-4 border-[#FFD613]" />
+                          <button 
+                            className="hidden group-hover:block absolute w-full h-full top-0 left-0 rounded-full text-red-500" 
+                            onClick={() => removeLeftProfile(index)}>
+                            ✕
+                          </button>
+                        </div>
+                      ))}
                     </div>
-                  </button>
+                    <button 
+                      onClick={() => openCharacterModal('left')} 
+                      className={`group flex items-center justify-center space-x-4 bg-[#FFD613] rounded-full p-4 mt-4 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
+                      + Add character
+                    </button>
+                  </div>
                 ) : (
-                  <button onClick={() => openCharacterModal('left')} className={`flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
-                    <div className='flex items-center rounded-full'>
-                      <img src="characters/Wise.png" alt="Wise - Default profile" className="w-12 h-12 rounded-full border-black border-2" />
-                      <div className='flex flex-col text-left ml-4'>
-                        <span className='text-xl'>Untitled</span>
-                        <span className='text-sm text-gray-500/60'>Click to switch</span>
-                      </div>
-                    </div>
-                  </button>
+                  <div>
+                    {leftProfile ? (
+                      <button onClick={() => openCharacterModal('left')} className={`group flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
+                        <div className='flex items-center rounded-full'>
+                          <img src={leftProfile} alt={leftName} className="w-12 h-12 rounded-full" />
+                          <div className='flex flex-col text-left ml-4'>
+                            <span className='text-xl'>{leftName}</span>
+                            <span className='text-sm text-gray-500/60 block group-hover:hidden'>
+                              {leftName === 'Untitled' ? 'Click to switch' : 
+                                ((message) => {
+                                  const lastMessage = messages.filter(message => message.side === 'left' && message.type === 'text').pop()?.content || '';
+                                  return lastMessage.length > 15 ? lastMessage.substring(0, 15) + '...' : lastMessage;
+                                })()
+                              }
+                            </span>
+                            <span className='text-sm text-gray-500/60 hidden group-hover:block'>Click to switch</span>
+                          </div>
+                        </div>
+                      </button>
+                    ) : (
+                      <button onClick={() => openCharacterModal('left')} className={`flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
+                        <div className='flex items-center rounded-full'>
+                          <img src="characters/Wise.png" alt="Wise - Default profile" className="w-12 h-12 rounded-full border-black border-2" />
+                          <div className='flex flex-col text-left ml-4'>
+                            <span className='text-xl'>Untitled</span>
+                            <span className='text-sm text-gray-500/60'>Click to switch</span>
+                          </div>
+                        </div>
+                      </button>
+                    )}
+                    <label className='flex items-center justify-center m-2 p-2 text-gray-600 rounded-xl cursor-pointer group'>
+                      <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'left', true)} className='hidden'/>
+                      <svg className="group-hover:stroke-[#FFD613] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                      </svg>
+                      <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Upload custom avatar</span>
+                    </label>
+                  </div>
                 )}
-                <label className='flex items-center justify-center m-2 p-2 text-gray-600 rounded-xl cursor-pointer group'>
-                  <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'left', true)} className='hidden'/>
-                  <svg className="group-hover:stroke-[#FFD613] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                  </svg>
-                  <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Upload custom avatar</span>
-                </label>
               </div>
               <div className='p-4 rounded-xl my-0 py-0'>
                 <h3 className='py-2 font-medium text-white/50'>as</h3>
@@ -529,10 +637,14 @@ const App = () => {
                 <div class="flex-grow h-px bg-gray-400"></div>
               </div>
               <div className="">
-                <span className='text-gray-600 text-sm'>You are messaging <span className='text-[#FFD613]'>{leftName}</span> as <span className='text-[#FFD613]'>{rightName}</span></span>
+                <span className='text-gray-600 text-sm'>You are simulating a {isGroupDM ? "Group Chat" : "DM"} where <span className='text-[#FFD613]'>{rightName}</span> is messaging {isGroupDM ? leftProfiles.map((profile, index) => <span key={index}><span className='text-[#FFD613]'>{profile.name}</span>{index === leftProfiles.length - 1 ? '.' : ', '} </span>): <span className='text-[#FFD613]'>{leftName}</span>}</span>
                 <br />
+                {!isGroupDM ? (
                 <span className="text-gray-600 text-sm">Total messages: {messages.length}, with {messages.filter(message => message.side === 'left').length} sent by {leftName} and {messages.filter(message => message.side === 'right').length} by {rightName}</span>
-              </div>
+                ): (
+                  <span className="text-gray-600 text-sm">Total messages: {messages.length}</span>
+                )}
+                </div>
             </div>
 
             <div className='main-chat-window w-full lg:w-3/4 flex flex-col bg-black/80 p-4 md:mx-2 my-2 rounded-xl min-h-[70vh]' id='main-chat-window'>
@@ -544,7 +656,7 @@ const App = () => {
                   <circle cx="12.5" cy="12.5" r="1.5" fill="black"/>
                   <circle cx="17.5" cy="12.5" r="1.5" fill="black"/>
                 </svg>
-                <span className='text-xl text-white ml-2'>{leftName}</span>
+                <span className='text-xl text-white ml-2'>{isGroupDM ? (leftProfiles.map((profile, index) => <span key={index}><span className='text-white'>{profile.name}</span>{index === leftProfiles.length - 1 ? ', and you - Group Chat' : ', ' } </span>)): <span className='text-white'>{leftName}</span>}</span>
               </div>
               <hr className='my-4 border-2 rounded-full border-gray-600/50' />
 
@@ -570,9 +682,13 @@ const App = () => {
                     <div key={index} className={`chat-message flex ${message.side === 'left' ? 'flex-row left-side' : message.side === 'right' ? 'flex-row-reverse right-side' : 'justify-center system-side'} items-start group`}>
                       {message.side !== 'system' && (
                         <img
-                          src={message.side === 'left' ? leftProfile : message.side === 'right' ? rightProfile : null}
+                          src={
+                            isGroupDM && message.side === 'left' 
+                              ? (message.profile ? message.profile.image : leftProfiles[0].image) 
+                              : (message.side === 'left' ? leftProfile : rightProfile)
+                          }
                           alt="profile"
-                          className="profile-pic w-10 h-10 rounded-full mx-4 mt-3"
+                          className="profile-pic w-10 h-10 rounded-full mx-4 mt-4"
                         />
                       )}
 
@@ -613,10 +729,32 @@ const App = () => {
 
               <div className="mt-6">
                 <div className={`${selectedSide === "left" ? "bg-gray-400/80" : "bg-[#1c55e3]/80"} my-2 p-2 rounded-xl h-fit flex flex-col md:flex-row items-center`} data-html2canvas-ignore>
-                  <span className={`${selectedSide === "left" ? "text-black/80" : "text-white/80"} text-sm md:text-md`}> Currently sending message as <span className={`${selectedSide === "left" ? "text-black" : "text-white"}`}>{selectedSide === "left" ? leftName : rightName}</span></span>
-                  <button onClick={() => setSelectedSide(selectedSide === 'left' ? 'right' : 'left')} className="ml-4 bg-black hover:bg-[#fadc00] text-[#fadc00] hover:text-black border-[#fadc00] hover:border-[black] border-4 focus:outline-none p-2 rounded-full flex-auto transition-colors">
-                    Switch
-                  </button>
+                  <span className={`${selectedSide === "left" ? "text-black/80" : "text-white/80"} text-sm md:text-md`}> Currently sending message as <span className={`${selectedSide === "left" && !isGroupDM ? "text-black" : selectedSide === "right" && !isGroupDM ? "text-white": "text-transparent"}`}>{selectedSide === "left" && !isGroupDM ? leftName : selectedSide === "right" && !isGroupDM ? rightName : "-"}</span></span>
+                  {!isGroupDM && (
+                    <button onClick={() => setSelectedSide(selectedSide === 'left' ? 'right' : 'left')} className="ml-4 bg-black hover:bg-[#fadc00] text-[#fadc00] hover:text-black border-[#fadc00] hover:border-[black] border-4 focus:outline-none p-2 rounded-full flex-auto transition-colors">
+                      Switch
+                    </button>
+                  )}
+                  {isGroupDM && (
+                    <div>
+                      <div className='tracking-wide'>
+                        <select 
+                          onChange={(e) => handleCharacterChange(e.target.value)}
+                          value={activeSide === "left" ? `left-${leftProfiles.indexOf(activeLeftCharacter)}` : `right-0`}
+                          className='font-normal border-4 cursor-pointer rounded-full drop-shadow-md bg-gray-600 border-black text-white'>
+                          <optgroup label="Left Characters">
+                            {leftProfiles.map((char, index) => (
+                              <option key={index} value={`left-${index}`}>{char.name}</option>
+                            ))}
+                          </optgroup>
+
+                          <optgroup label="Right Characters">
+                            <option value={`right-0`}>{rightName}</option>
+                          </optgroup>
+                        </select>
+                      </div>
+                    </div>
+                  )}
                   <button onClick={() => setIsSystemModalOpen(true)} className="ml-4 bg-black hover:bg-[#fadc00] text-[#fadc00] hover:text-black border-[#fadc00] hover:border-[black] border-4 focus:outline-none p-2 rounded-full flex-auto transition-colors">
                     Add System Message
                   </button>
@@ -666,18 +804,20 @@ const App = () => {
 
           <footer class="bg-black" id="export-footer-div">
               <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-                <div class="sm:flex sm:items-center sm:justify-between">
+                <div class="sm:flex sm:items-center sm:justify-between text-center">
                     <span class="text-sm text-gray-500 sm:text-center">
                       
                     </span>
                     <button className='rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]'>About</button>
                     <div className=''>
                       <button onClick={exportChat} className="rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]">Export Chat as Image</button>
-                      <button onClick={toggleDropDownExportOptions} className="rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-2py-2"> ^ </button>
+                      <button onClick={toggleDropDownExportOptions} className="rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white outline-none focus:outline-none active:outline-none">
+                        ▼
+                      </button>
                       {isDropDownExportOptionsOpen && (
-                        <div className={`relative mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 bg-opacity-90 flex flex-col items-center z-50 dropdown`}>
-                          <button onClick={exportChatAsText} className="m-1 p-2 bg-gray-700 text-white rounded">Export Chat as TXT</button>
-                          <button onClick={exportChatAsJSON} className="m-1 p-2 bg-gray-700 text-white rounded">Export Chat as JSON</button>
+                        <div className={`mb-2 bg-opacity-90 flex flex-col items-center z-50 dropdown`}>
+                          <button onClick={exportChatAsText} className="rounded-full w-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]">Export Chat as TXT</button>
+                          <button onClick={exportChatAsJSON} className="rounded-full w-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]">Export Chat as JSON</button>
                         </div>
                       )}
                     </div>
