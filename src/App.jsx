@@ -205,9 +205,15 @@ const EditMessageModal = ({ isOpen, onClose, onSave, messageContent }) => {
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [isGroupDM, setIsGroupDM] = useState(false);
   const [selectedSide, setSelectedSide] = useState('left');
+  const [activeSide, setActiveSide] = useState('left');
   const [leftProfile, setLeftProfile] = useState(null);
+  const [leftProfiles, setLeftProfiles] = useState([]);
   const [rightProfile, setRightProfile] = useState(null);
+  const [activeLeftCharacter, setActiveLeftCharacter] = useState(null);
+  const [activeRightCharacter, setActiveRightCharacter] = useState(rightProfile);
+  const [activeCharacter, setActiveCharacter] = useState('');
   const [leftName, setLeftName] = useState("Untitled");
   const [rightName, setRightName] = useState("Untitled");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -231,9 +237,46 @@ const App = () => {
 
   const addMessage = () => {
     if (!inputText.trim()) return;
-    setMessages([...messages, { side: selectedSide, type: 'text', content: inputText }]);
+  
+    if (isGroupDM) {
+      setMessages([...messages, { 
+        side: activeSide,
+        profile: activeSide === "left" ? activeLeftCharacter : activeRightCharacter,
+        type: 'text', 
+        content: inputText 
+      }]);
+    } else {
+      setMessages([...messages, { 
+        side: selectedSide, 
+        profile: selectedSide === 'left' ? activeLeftCharacter : activeRightCharacter,
+        type: 'text', 
+        content: inputText 
+      }]);
+      console.log(selectedSide, activeLeftCharacter, activeRightCharacter, activeCharacter);
+    }
+    
     setInputText('');
-  };
+};
+;
+  
+  
+  const handleCharacterChange = (selectedValue) => {
+    const [side, index] = selectedValue.split('-');
+    
+    if (side === 'left') {
+      const selectedProfile = leftProfiles[parseInt(index)];
+      setActiveSide('left');
+      setActiveLeftCharacter(selectedProfile);
+      setActiveCharacter(selectedValue);
+    } else if (side === 'right') {
+      const selectedRightProfile = { name: rightName, image: rightProfile };
+      setActiveSide('right');
+      setActiveRightCharacter(selectedRightProfile);
+      setActiveCharacter(selectedValue);
+    }
+};
+ 
+  
 
   const addSystemMessage = (MessageComponent) => {
     setMessages([...messages, { side: 'system', type: 'component', content: <MessageComponent /> }]);
@@ -310,13 +353,23 @@ const App = () => {
 
   const handleSelectCharacter = (character) => {
     if (profileSide === 'left') {
-      setLeftProfile(character.image);
-      setLeftName(character.name);
+      if (isGroupDM) {
+        setLeftProfiles([...leftProfiles, character]);
+      } else {
+        setLeftProfile(character.image);
+        setLeftName(character.name);
+      }
     } else {
       setRightProfile(character.image);
       setRightName(character.name);
     }
   };
+  
+  const removeLeftProfile = (index) => {
+    const updatedProfiles = leftProfiles.filter((_, i) => i !== index);
+    setLeftProfiles(updatedProfiles);
+  };
+  
 
 
   const exportChat = () => {
@@ -441,6 +494,10 @@ const App = () => {
 
             <div className="profiles w-full lg:w-1/4 flex flex-col bg-black/80 p-4 md:mx-2 my-2 rounded-xl min-h-[90vh]">
               <div className='p-4 rounded-xl my-0 py-0'>
+              <div className=''>
+                  <button className='' onClick={() => setIsGroupDM(false)}>Direct DM</button>
+                  <button className='' onClick={() => setIsGroupDM(true)}>Group DM</button>
+              </div>
               <div class="flex items-center py-4">
                 <div class="flex-grow h-px bg-gray-400"></div> 
                 <span class="flex-shrink text-md text-gray-500 px-4 font-light">Choose</span>
@@ -484,6 +541,28 @@ const App = () => {
                   <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Upload custom avatar</span>
                 </label>
               </div>
+              {isGroupDM && (
+                <div>
+                  <h3>Group Left Profiles</h3>
+                  <div className="flex space-x-4">
+                    {leftProfiles.map((profile, index) => (
+                      <div key={index} className="relative">
+                        <img src={profile.image} alt={profile.name} className="w-16 h-16 rounded-full" />
+                        <button 
+                          className="absolute top-0 right-0 text-red-500" 
+                          onClick={() => removeLeftProfile(index)}>
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <button 
+                    onClick={() => openCharacterModal('left')} 
+                    className="bg-green-500 text-white p-2 mt-2 rounded">
+                    Add Left Profile
+                  </button>
+                </div>
+              )}
               <div className='p-4 rounded-xl my-0 py-0'>
                 <h3 className='py-2 font-medium text-white/50'>as</h3>
                 {rightProfile ? (
@@ -529,7 +608,7 @@ const App = () => {
                 <div class="flex-grow h-px bg-gray-400"></div>
               </div>
               <div className="">
-                <span className='text-gray-600 text-sm'>You are messaging <span className='text-[#FFD613]'>{leftName}</span> as <span className='text-[#FFD613]'>{rightName}</span></span>
+                <span className='text-gray-600 text-sm'>You are simulating a DM where <span className='text-[#FFD613]'>{rightName}</span> is messaging <span className='text-[#FFD613]'>{leftName}</span>.</span>
                 <br />
                 <span className="text-gray-600 text-sm">Total messages: {messages.length}, with {messages.filter(message => message.side === 'left').length} sent by {leftName} and {messages.filter(message => message.side === 'right').length} by {rightName}</span>
               </div>
@@ -570,9 +649,13 @@ const App = () => {
                     <div key={index} className={`chat-message flex ${message.side === 'left' ? 'flex-row left-side' : message.side === 'right' ? 'flex-row-reverse right-side' : 'justify-center system-side'} items-start group`}>
                       {message.side !== 'system' && (
                         <img
-                          src={message.side === 'left' ? leftProfile : message.side === 'right' ? rightProfile : null}
+                          src={
+                            isGroupDM && message.side === 'left' 
+                              ? (message.profile ? message.profile.image : '') 
+                              : (message.side === 'left' ? leftProfile : rightProfile)
+                          }
                           alt="profile"
-                          className="profile-pic w-10 h-10 rounded-full mx-4 mt-3"
+                          className="profile-pic w-10 h-10 rounded-full mx-4"
                         />
                       )}
 
@@ -614,9 +697,31 @@ const App = () => {
               <div className="mt-6">
                 <div className={`${selectedSide === "left" ? "bg-gray-400/80" : "bg-[#1c55e3]/80"} my-2 p-2 rounded-xl h-fit flex flex-col md:flex-row items-center`} data-html2canvas-ignore>
                   <span className={`${selectedSide === "left" ? "text-black/80" : "text-white/80"} text-sm md:text-md`}> Currently sending message as <span className={`${selectedSide === "left" ? "text-black" : "text-white"}`}>{selectedSide === "left" ? leftName : rightName}</span></span>
-                  <button onClick={() => setSelectedSide(selectedSide === 'left' ? 'right' : 'left')} className="ml-4 bg-black hover:bg-[#fadc00] text-[#fadc00] hover:text-black border-[#fadc00] hover:border-[black] border-4 focus:outline-none p-2 rounded-full flex-auto transition-colors">
-                    Switch
-                  </button>
+                  {!isGroupDM && (
+                    <button onClick={() => setSelectedSide(selectedSide === 'left' ? 'right' : 'left')} className="ml-4 bg-black hover:bg-[#fadc00] text-[#fadc00] hover:text-black border-[#fadc00] hover:border-[black] border-4 focus:outline-none p-2 rounded-full flex-auto transition-colors">
+                      Switch
+                    </button>
+                  )}
+                  {isGroupDM && (
+                    <div>
+                      <h3>Switch Characters</h3>
+                      <div>
+                        <select 
+                          onChange={(e) => handleCharacterChange(e.target.value)}
+                          value={activeSide === "left" ? `left-${leftProfiles.indexOf(activeLeftCharacter)}` : `right-0`}>
+                          <optgroup label="Left Characters">
+                            {leftProfiles.map((char, index) => (
+                              <option key={index} value={`left-${index}`}>{char.name}</option>
+                            ))}
+                          </optgroup>
+
+                          <optgroup label="Right Characters">
+                            <option value={`right-0`}>{rightName}</option>
+                          </optgroup>
+                        </select>
+                      </div>
+                    </div>
+                  )}
                   <button onClick={() => setIsSystemModalOpen(true)} className="ml-4 bg-black hover:bg-[#fadc00] text-[#fadc00] hover:text-black border-[#fadc00] hover:border-[black] border-4 focus:outline-none p-2 rounded-full flex-auto transition-colors">
                     Add System Message
                   </button>
