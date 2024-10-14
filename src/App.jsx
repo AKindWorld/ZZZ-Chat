@@ -494,9 +494,16 @@ const App = () => {
 
             <div className="profiles w-full lg:w-1/4 flex flex-col bg-black/80 p-4 md:mx-2 my-2 rounded-xl min-h-[90vh]">
               <div className='p-4 rounded-xl my-0 py-0'>
-              <div className=''>
-                  <button className='' onClick={() => setIsGroupDM(false)}>Direct DM</button>
-                  <button className='' onClick={() => setIsGroupDM(true)}>Group DM</button>
+              <div className='flex flex-row bg-gray-600/40 rounded-full'>
+                  <button className={`flex place-content-center w-1/3 rounded-full bg-transparent hover:bg-red-400`}>
+                    <img src="/assets/icons/ZZZ_agent_profile_icon.png" alt='Agent Profile Icon' className="w-auto auto max-h-8" />
+                  </button>
+                  <button className={`flex place-content-center w-1/3 rounded-full ${isAnimatedBackgroundEnabled && !isGroupDM ? 'animate-color-change' : !isGroupDM && !isAnimatedBackgroundEnabled ? 'bg-[#FFD613]' : 'bg-transparent'} outline-none focus:outline-none active:outline-none hover:border-[#FFD613]`} onClick={() => setIsGroupDM(false)}>
+                    <img src="/assets/icons/ZZZ_dm_icon.png" alt='Agent Profile Icon' className={`w-auto auto max-h-8 ${isGroupDM ? 'invert' : 'invert-0'}`} />
+                  </button>
+                  <button className={`flex place-content-center w-1/3 rounded-full ${isAnimatedBackgroundEnabled && isGroupDM ? 'animate-color-change' : isGroupDM && !isAnimatedBackgroundEnabled ? 'bg-[#FFD613]' : 'bg-transparent'} outline-none focus:outline-none active:outline-none hover:border-[#FFD613]`} onClick={() => setIsGroupDM(true)}>
+                    <img src="/assets/icons/ZZZ_group_chat_icon.png" alt='Agent Profile Icon' className={`w-auto auto max-h-8 ${!isGroupDM ? 'invert' : 'invert-0'}`} />
+                  </button>
               </div>
               <div class="flex items-center py-4">
                 <div class="flex-grow h-px bg-gray-400"></div> 
@@ -504,65 +511,68 @@ const App = () => {
                 <div class="flex-grow h-px bg-gray-400"></div>
               </div>
                 <h3 className='py-2 font-medium text-white/50'>Messaging</h3>
-                {leftProfile ? (
-                  <button onClick={() => openCharacterModal('left')} className={`group flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
-                    <div className='flex items-center rounded-full'>
-                      <img src={leftProfile} alt={leftName} className="w-12 h-12 rounded-full" />
-                      <div className='flex flex-col text-left ml-4'>
-                        <span className='text-xl'>{leftName}</span>
-                        <span className='text-sm text-gray-500/60 block group-hover:hidden'>
-                          {leftName === 'Untitled' ? 'Click to switch' : 
-                            ((message) => {
-                              const lastMessage = messages.filter(message => message.side === 'left' && message.type === 'text').pop()?.content || '';
-                              return lastMessage.length > 15 ? lastMessage.substring(0, 15) + '...' : lastMessage;
-                            })()
-                          }
-                        </span>
-                        <span className='text-sm text-gray-500/60 hidden group-hover:block'>Click to switch</span>
-                      </div>
+                {isGroupDM ? (
+                  <div>
+                    <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
+                      {leftProfiles.length === 0 && <p className="text-white/50 col-span-3 md:col-span-4">No profiles yet. Click + to add.</p>}
+                      {leftProfiles.map((profile, index) => (
+                        <div key={index} className="relative group">
+                          <img src={profile.image} alt={profile.name} className="w-16 h-16 rounded-full border-4 border-[#FFD613]" />
+                          <button 
+                            className="hidden group-hover:block absolute w-full h-full top-0 left-0 rounded-full text-red-500" 
+                            onClick={() => removeLeftProfile(index)}>
+                            ✕
+                          </button>
+                        </div>
+                      ))}
                     </div>
-                  </button>
-                ) : (
-                  <button onClick={() => openCharacterModal('left')} className={`flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
-                    <div className='flex items-center rounded-full'>
-                      <img src="characters/Wise.png" alt="Wise - Default profile" className="w-12 h-12 rounded-full border-black border-2" />
-                      <div className='flex flex-col text-left ml-4'>
-                        <span className='text-xl'>Untitled</span>
-                        <span className='text-sm text-gray-500/60'>Click to switch</span>
-                      </div>
-                    </div>
-                  </button>
-                )}
-                <label className='flex items-center justify-center m-2 p-2 text-gray-600 rounded-xl cursor-pointer group'>
-                  <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'left', true)} className='hidden'/>
-                  <svg className="group-hover:stroke-[#FFD613] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                  </svg>
-                  <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Upload custom avatar</span>
-                </label>
-              </div>
-              {isGroupDM && (
-                <div>
-                  <h3>Group Left Profiles</h3>
-                  <div className="flex space-x-4">
-                    {leftProfiles.map((profile, index) => (
-                      <div key={index} className="relative">
-                        <img src={profile.image} alt={profile.name} className="w-16 h-16 rounded-full" />
-                        <button 
-                          className="absolute top-0 right-0 text-red-500" 
-                          onClick={() => removeLeftProfile(index)}>
-                          ✕
-                        </button>
-                      </div>
-                    ))}
+                    <button 
+                      onClick={() => openCharacterModal('left')} 
+                      className={`group flex items-center justify-center space-x-4 bg-[#FFD613] rounded-full p-4 mt-4 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
+                      + Add Left Profile
+                    </button>
                   </div>
-                  <button 
-                    onClick={() => openCharacterModal('left')} 
-                    className="bg-green-500 text-white p-2 mt-2 rounded">
-                    Add Left Profile
-                  </button>
-                </div>
-              )}
+                ) : (
+                  <div>
+                    {leftProfile ? (
+                      <button onClick={() => openCharacterModal('left')} className={`group flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
+                        <div className='flex items-center rounded-full'>
+                          <img src={leftProfile} alt={leftName} className="w-12 h-12 rounded-full" />
+                          <div className='flex flex-col text-left ml-4'>
+                            <span className='text-xl'>{leftName}</span>
+                            <span className='text-sm text-gray-500/60 block group-hover:hidden'>
+                              {leftName === 'Untitled' ? 'Click to switch' : 
+                                ((message) => {
+                                  const lastMessage = messages.filter(message => message.side === 'left' && message.type === 'text').pop()?.content || '';
+                                  return lastMessage.length > 15 ? lastMessage.substring(0, 15) + '...' : lastMessage;
+                                })()
+                              }
+                            </span>
+                            <span className='text-sm text-gray-500/60 hidden group-hover:block'>Click to switch</span>
+                          </div>
+                        </div>
+                      </button>
+                    ) : (
+                      <button onClick={() => openCharacterModal('left')} className={`flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
+                        <div className='flex items-center rounded-full'>
+                          <img src="characters/Wise.png" alt="Wise - Default profile" className="w-12 h-12 rounded-full border-black border-2" />
+                          <div className='flex flex-col text-left ml-4'>
+                            <span className='text-xl'>Untitled</span>
+                            <span className='text-sm text-gray-500/60'>Click to switch</span>
+                          </div>
+                        </div>
+                      </button>
+                    )}
+                    <label className='flex items-center justify-center m-2 p-2 text-gray-600 rounded-xl cursor-pointer group'>
+                      <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'left', true)} className='hidden'/>
+                      <svg className="group-hover:stroke-[#FFD613] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                      </svg>
+                      <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Upload custom avatar</span>
+                    </label>
+                  </div>
+                )}
+              </div>
               <div className='p-4 rounded-xl my-0 py-0'>
                 <h3 className='py-2 font-medium text-white/50'>as</h3>
                 {rightProfile ? (
