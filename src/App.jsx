@@ -58,7 +58,7 @@ const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
 
 
 const UserAddedMessage = ({ message }) => <div className='rounded-full p-2 px-4 text-white '>
-    <div className='flex items-center'>
+    <div className='flex items-center place-content-center'>
       <svg className="mx-2 size-[5]" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle className="stroke-white" cx="10" cy="10" r="9" stroke="#FFF" stroke-width="2"/>
         <path className="fill-white" d="M8 4.5C8 4.22386 8.22386 4 8.5 4H11.5C11.7761 4 12 4.22386 12 4.5V11.5C12 11.7761 11.7761 12 11.5 12H8.5C8.22386 12 8 11.7761 8 11.5V4.5Z" fill="#00A2FF"/>
@@ -67,7 +67,7 @@ const UserAddedMessage = ({ message }) => <div className='rounded-full p-2 px-4 
       {message}
     </div>
   </div>;
-const UserBlockedMessage = ({ message }) => <div>{message}</div>;
+const UserSingleLineMessage = ({ message }) => <div className='text-gray-400'>{message}</div>;
 
 const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
   const [customMessage, setCustomMessage] = useState('');
@@ -75,7 +75,7 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
 
   const systemMessages = [
     { component: UserAddedMessage, props: { message: `User added you` } },
-    { component: UserBlockedMessage, props: { message: 'User blocked you' } },
+    { component: UserSingleLineMessage, props: { message: '- History -' } },
   ];
 
   const handleSelectMessage = (index) => {
@@ -98,8 +98,11 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
         <div className="">
         {editingMessageIndex === null ? (
           <div>
-            <div className='flex items-center'>
-              <h2 className="text-lg font-bold tracking-wider mb-4 text-white flex-grow">Select System Message</h2>
+            <div className='flex items-center mb-4'>
+              <div className='flex flex-grow flex-col'>
+                <h2 className="text-lg font-bold tracking-wider text-white flex-grow">Select System Message</h2>
+                <span className='text-sm text-gray-400'>You will be able to customize the message</span>
+              </div>
               <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                   <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
@@ -120,7 +123,7 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
                 return (
                   <button
                     key={index}
-                    className="w-full p-2 rounded text-left"
+                    className="w-full p-2 rounded text-center hover:text-white border-0 hover:border-0 hover:outline-none focus:outline-none active:outline-none"
                     onClick={() => handleSelectMessage(index)}
                   >
                     <Component {...Message.props} />
@@ -268,11 +271,13 @@ const App = () => {
       setActiveSide('left');
       setActiveLeftCharacter(selectedProfile);
       setActiveCharacter(selectedValue);
+      console.log(selectedSide, activeLeftCharacter, activeRightCharacter, activeCharacter);
     } else if (side === 'right') {
       const selectedRightProfile = { name: rightName, image: rightProfile };
       setActiveSide('right');
       setActiveRightCharacter(selectedRightProfile);
       setActiveCharacter(selectedValue);
+      console.log(selectedSide, activeLeftCharacter, activeRightCharacter, activeCharacter);
     }
 };
  
@@ -319,8 +324,22 @@ const App = () => {
           sessionStorage.setItem('rightProfile', imageData);
         }
       } else {
-        setMessages([...messages, { side, type: 'image', content: imageData }]);
-      }
+          if (isGroupDM) {
+            setMessages([...messages, { 
+              side: activeSide,
+              profile: activeSide === "left" ? activeLeftCharacter : activeRightCharacter,
+              type: 'image', 
+              content: imageData 
+            }]);
+          } else {
+            setMessages([...messages, { 
+              side: selectedSide, 
+              profile: selectedSide === 'left' ? activeLeftCharacter : activeRightCharacter,
+              type: 'image', 
+              content: imageData 
+            }]);
+          }
+        }
     };
     reader.readAsDataURL(file);
   };
@@ -529,7 +548,7 @@ const App = () => {
                     <button 
                       onClick={() => openCharacterModal('left')} 
                       className={`group flex items-center justify-center space-x-4 bg-[#FFD613] rounded-full p-4 mt-4 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
-                      + Add Left Profile
+                      + Add character
                     </button>
                   </div>
                 ) : (
@@ -618,10 +637,14 @@ const App = () => {
                 <div class="flex-grow h-px bg-gray-400"></div>
               </div>
               <div className="">
-                <span className='text-gray-600 text-sm'>You are simulating a DM where <span className='text-[#FFD613]'>{rightName}</span> is messaging <span className='text-[#FFD613]'>{leftName}</span>.</span>
+                <span className='text-gray-600 text-sm'>You are simulating a {isGroupDM ? "Group Chat" : "DM"} where <span className='text-[#FFD613]'>{rightName}</span> is messaging {isGroupDM ? leftProfiles.map((profile, index) => <span key={index}><span className='text-[#FFD613]'>{profile.name}</span>{index === leftProfiles.length - 1 ? '.' : ', '} </span>): <span className='text-[#FFD613]'>{leftName}</span>}</span>
                 <br />
+                {!isGroupDM ? (
                 <span className="text-gray-600 text-sm">Total messages: {messages.length}, with {messages.filter(message => message.side === 'left').length} sent by {leftName} and {messages.filter(message => message.side === 'right').length} by {rightName}</span>
-              </div>
+                ): (
+                  <span className="text-gray-600 text-sm">Total messages: {messages.length}</span>
+                )}
+                </div>
             </div>
 
             <div className='main-chat-window w-full lg:w-3/4 flex flex-col bg-black/80 p-4 md:mx-2 my-2 rounded-xl min-h-[70vh]' id='main-chat-window'>
@@ -633,7 +656,7 @@ const App = () => {
                   <circle cx="12.5" cy="12.5" r="1.5" fill="black"/>
                   <circle cx="17.5" cy="12.5" r="1.5" fill="black"/>
                 </svg>
-                <span className='text-xl text-white ml-2'>{leftName}</span>
+                <span className='text-xl text-white ml-2'>{isGroupDM ? (leftProfiles.map((profile, index) => <span key={index}><span className='text-white'>{profile.name}</span>{index === leftProfiles.length - 1 ? ', and you - Group Chat' : ', ' } </span>)): <span className='text-white'>{leftName}</span>}</span>
               </div>
               <hr className='my-4 border-2 rounded-full border-gray-600/50' />
 
@@ -661,11 +684,11 @@ const App = () => {
                         <img
                           src={
                             isGroupDM && message.side === 'left' 
-                              ? (message.profile ? message.profile.image : '') 
+                              ? (message.profile ? message.profile.image : leftProfiles[0].image) 
                               : (message.side === 'left' ? leftProfile : rightProfile)
                           }
                           alt="profile"
-                          className="profile-pic w-10 h-10 rounded-full mx-4"
+                          className="profile-pic w-10 h-10 rounded-full mx-4 mt-4"
                         />
                       )}
 
@@ -706,7 +729,7 @@ const App = () => {
 
               <div className="mt-6">
                 <div className={`${selectedSide === "left" ? "bg-gray-400/80" : "bg-[#1c55e3]/80"} my-2 p-2 rounded-xl h-fit flex flex-col md:flex-row items-center`} data-html2canvas-ignore>
-                  <span className={`${selectedSide === "left" ? "text-black/80" : "text-white/80"} text-sm md:text-md`}> Currently sending message as <span className={`${selectedSide === "left" ? "text-black" : "text-white"}`}>{selectedSide === "left" ? leftName : rightName}</span></span>
+                  <span className={`${selectedSide === "left" ? "text-black/80" : "text-white/80"} text-sm md:text-md`}> Currently sending message as <span className={`${selectedSide === "left" && !isGroupDM ? "text-black" : selectedSide === "right" && !isGroupDM ? "text-white": "text-transparent"}`}>{selectedSide === "left" && !isGroupDM ? leftName : selectedSide === "right" && !isGroupDM ? rightName : "-"}</span></span>
                   {!isGroupDM && (
                     <button onClick={() => setSelectedSide(selectedSide === 'left' ? 'right' : 'left')} className="ml-4 bg-black hover:bg-[#fadc00] text-[#fadc00] hover:text-black border-[#fadc00] hover:border-[black] border-4 focus:outline-none p-2 rounded-full flex-auto transition-colors">
                       Switch
@@ -714,11 +737,11 @@ const App = () => {
                   )}
                   {isGroupDM && (
                     <div>
-                      <h3>Switch Characters</h3>
-                      <div>
+                      <div className='tracking-wide'>
                         <select 
                           onChange={(e) => handleCharacterChange(e.target.value)}
-                          value={activeSide === "left" ? `left-${leftProfiles.indexOf(activeLeftCharacter)}` : `right-0`}>
+                          value={activeSide === "left" ? `left-${leftProfiles.indexOf(activeLeftCharacter)}` : `right-0`}
+                          className='font-normal border-4 cursor-pointer rounded-full drop-shadow-md bg-gray-600 border-black text-white'>
                           <optgroup label="Left Characters">
                             {leftProfiles.map((char, index) => (
                               <option key={index} value={`left-${index}`}>{char.name}</option>
@@ -781,18 +804,20 @@ const App = () => {
 
           <footer class="bg-black" id="export-footer-div">
               <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-                <div class="sm:flex sm:items-center sm:justify-between">
+                <div class="sm:flex sm:items-center sm:justify-between text-center">
                     <span class="text-sm text-gray-500 sm:text-center">
                       
                     </span>
                     <button className='rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]'>About</button>
                     <div className=''>
                       <button onClick={exportChat} className="rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]">Export Chat as Image</button>
-                      <button onClick={toggleDropDownExportOptions} className="rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-2py-2"> ^ </button>
+                      <button onClick={toggleDropDownExportOptions} className="rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white outline-none focus:outline-none active:outline-none">
+                        ▼
+                      </button>
                       {isDropDownExportOptionsOpen && (
-                        <div className={`relative mb-2 left-1/2 transform -translate-x-1/2 bg-gray-900 bg-opacity-90 flex flex-col items-center z-50 dropdown`}>
-                          <button onClick={exportChatAsText} className="m-1 p-2 bg-gray-700 text-white rounded">Export Chat as TXT</button>
-                          <button onClick={exportChatAsJSON} className="m-1 p-2 bg-gray-700 text-white rounded">Export Chat as JSON</button>
+                        <div className={`mb-2 bg-opacity-90 flex flex-col items-center z-50 dropdown`}>
+                          <button onClick={exportChatAsText} className="rounded-full w-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]">Export Chat as TXT</button>
+                          <button onClick={exportChatAsJSON} className="rounded-full w-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]">Export Chat as JSON</button>
                         </div>
                       )}
                     </div>
