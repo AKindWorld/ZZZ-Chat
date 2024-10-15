@@ -4,52 +4,103 @@ import html2canvas from 'html2canvas';
 
 const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
   const [characters, setCharacters] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     axios.get('../src/data/characters.json')
       .then(response => {
-        setCharacters(response.data);
+        const charactersWithCategory = response.data;
+        setCharacters(charactersWithCategory);
       })
       .catch(error => {
         console.error('Error loading characters:', error);
       });
   }, []);
 
+  const groupedCharacters = characters.reduce((groups, character) => {
+    const category = character.category;
+    if (!groups[category]) {
+      groups[category] = [];
+    }
+    groups[category].push(character);
+    return groups;
+  }, {});
+
+  const filteredGroupedCharacters = Object.keys(groupedCharacters).reduce((result, category) => {
+    const filteredCharacters = groupedCharacters[category].filter(character => 
+      character.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      character.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    if (category.toLowerCase().includes(searchQuery.toLowerCase())) {
+      result[category] = groupedCharacters[category];
+    }
+    else if (filteredCharacters.length > 0) {
+      result[category] = filteredCharacters;
+    }
+
+    return result;
+  }, {});
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
-      <div className="bg-black p-6 rounded-xl w-1/2 max-w-lg">
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50 scroll-smooth">
+      <div className="bg-black p-6 rounded-xl w-full m-4 md:w-3/5 h-screen">
         <div className='flex items-center'>
           <h2 className="text-lg font-bold flex-grow text-white">Choose a Character for {side}</h2>
           <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
             <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
-              <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
-              <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
-              <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
-              <mask id="path-4-inside-1_832_899" fill="white">
-                <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
-              </mask>
-              <path className="group-hover:fill-[#BF2005]" d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z" fill="black"/>
-              <path className="group-hover:fill-[#BF2005]" d="M17.7707 11.828L16.3565 13.2422L17.7705 14.6563L19.1847 13.2424L17.7707 11.828ZM16.828 12.7707L18.2422 14.1849L19.6564 12.7707L18.2422 11.3565L16.828 12.7707ZM17.7707 13.7133L19.1847 12.299L17.7705 10.8851L16.3565 12.2991L17.7707 13.7133ZM18.714 12.7707L17.2998 11.3565L15.8856 12.7707L17.2998 14.1849L18.714 12.7707ZM20.128 16.0701L18.7139 17.4845L20.128 16.0701ZM14.4713 15.1273L13.0571 13.7131L14.4713 15.1273ZM18.7139 8.05687L16.3566 10.4136L19.1847 13.2424L21.542 10.8856L18.7139 8.05687ZM19.1849 10.4138L16.8282 8.05712L13.9998 10.8855L16.3565 13.2422L19.1849 10.4138ZM13.0571 11.8282L15.4138 14.1849L18.2422 11.3565L15.8855 8.99979L13.0571 11.8282ZM15.4138 11.3565L13.0571 13.7131L15.8855 16.5415L18.2422 14.1849L15.4138 11.3565ZM16.8282 17.4842L19.1849 15.1275L16.3565 12.2991L13.9998 14.6558L16.8282 17.4842ZM16.3566 15.1277L18.7139 17.4845L21.542 14.6557L19.1847 12.299L16.3566 15.1277ZM22.4849 13.7131L20.1282 11.3565L17.2998 14.1849L19.6564 16.5415L22.4849 13.7131ZM20.1282 14.1849L22.4849 11.8282L19.6564 8.99981L17.2998 11.3565L20.1282 14.1849ZM22.4849 17.4842C23.5262 16.4429 23.5262 14.7545 22.4849 13.7131L19.6564 16.5415C19.1357 16.0208 19.1357 15.1765 19.6564 14.6558L22.4849 17.4842ZM18.7139 17.4845C19.7553 18.5256 21.4436 18.5255 22.4849 17.4842L19.6564 14.6558C20.1771 14.1351 21.0213 14.1351 21.542 14.6557L18.7139 17.4845ZM13.0571 17.4842C14.0985 18.5256 15.7869 18.5256 16.8282 17.4842L13.9998 14.6558C14.5205 14.135 15.3648 14.135 15.8855 14.6558L13.0571 17.4842ZM13.0571 8.05712C12.0158 9.09848 12.0158 10.7869 13.0571 11.8282L15.8855 8.99979C16.4063 9.52052 16.4063 10.3648 15.8855 10.8855L13.0571 8.05712ZM16.8282 8.05712C15.7869 7.01576 14.0985 7.01576 13.0571 8.05712L15.8855 10.8855C15.3648 11.4063 14.5205 11.4063 13.9998 10.8855L16.8282 8.05712ZM13.0571 13.7131C12.0158 14.7545 12.0158 16.4429 13.0571 17.4842L15.8855 14.6558C16.4063 15.1765 16.4063 16.0208 15.8855 16.5415L13.0571 13.7131ZM22.4849 11.8282C23.5262 10.7869 23.5262 9.09846 22.4849 8.05709L19.6564 10.8855C19.1357 10.3648 19.1357 9.52054 19.6564 8.99981L22.4849 11.8282ZM21.542 10.8856C21.0213 11.4062 20.1771 11.4062 19.6564 10.8855L22.4849 8.05709C21.4436 7.0158 19.7553 7.01571 18.7139 8.05687L21.542 10.8856Z" fill="black" mask="url(#path-4-inside-1_832_899)"/>
-            </svg>  
-          </button>
+                <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
+                <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
+                <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                <mask id="path-4-inside-1_832_899" fill="white">
+                  <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
+                </mask>
+                <path className="group-hover:fill-[#BF2005]" d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z" fill="black"/>
+                <path className="group-hover:fill-[#BF2005]" d="M17.7707 11.828L16.3565 13.2422L17.7705 14.6563L19.1847 13.2424L17.7707 11.828ZM16.828 12.7707L18.2422 14.1849L19.6564 12.7707L18.2422 11.3565L16.828 12.7707ZM17.7707 13.7133L19.1847 12.299L17.7705 10.8851L16.3565 12.2991L17.7707 13.7133ZM18.714 12.7707L17.2998 11.3565L15.8856 12.7707L17.2998 14.1849L18.714 12.7707ZM20.128 16.0701L18.7139 17.4845L20.128 16.0701ZM14.4713 15.1273L13.0571 13.7131L14.4713 15.1273ZM18.7139 8.05687L16.3566 10.4136L19.1847 13.2424L21.542 10.8856L18.7139 8.05687ZM19.1849 10.4138L16.8282 8.05712L13.9998 10.8855L16.3565 13.2422L19.1849 10.4138ZM13.0571 11.8282L15.4138 14.1849L18.2422 11.3565L15.8855 8.99979L13.0571 11.8282ZM15.4138 11.3565L13.0571 13.7131L15.8855 16.5415L18.2422 14.1849L15.4138 11.3565ZM16.8282 17.4842L19.1849 15.1275L16.3565 12.2991L13.9998 14.6558L16.8282 17.4842ZM16.3566 15.1277L18.7139 17.4845L21.542 14.6557L19.1847 12.299L16.3566 15.1277ZM22.4849 13.7131L20.1282 11.3565L17.2998 14.1849L19.6564 16.5415L22.4849 13.7131ZM20.1282 14.1849L22.4849 11.8282L19.6564 8.99981L17.2998 11.3565L20.1282 14.1849ZM22.4849 17.4842C23.5262 16.4429 23.5262 14.7545 22.4849 13.7131L19.6564 16.5415C19.1357 16.0208 19.1357 15.1765 19.6564 14.6558L22.4849 17.4842ZM18.7139 17.4845C19.7553 18.5256 21.4436 18.5255 22.4849 17.4842L19.6564 14.6558C20.1771 14.1351 21.0213 14.1351 21.542 14.6557L18.7139 17.4845ZM13.0571 17.4842C14.0985 18.5256 15.7869 18.5256 16.8282 17.4842L13.9998 14.6558C14.5205 14.135 15.3648 14.135 15.8855 14.6558L13.0571 17.4842ZM13.0571 8.05712C12.0158 9.09848 12.0158 10.7869 13.0571 11.8282L15.8855 8.99979C16.4063 9.52052 16.4063 10.3648 15.8855 10.8855L13.0571 8.05712ZM16.8282 8.05712C15.7869 7.01576 14.0985 7.01576 13.0571 8.05712L15.8855 10.8855C15.3648 11.4063 14.5205 11.4063 13.9998 10.8855L16.8282 8.05712ZM13.0571 13.7131C12.0158 14.7545 12.0158 16.4429 13.0571 17.4842L15.8855 14.6558C16.4063 15.1765 16.4063 16.0208 15.8855 16.5415L13.0571 13.7131ZM22.4849 11.8282C23.5262 10.7869 23.5262 9.09846 22.4849 8.05709L19.6564 10.8855C19.1357 10.3648 19.1357 9.52054 19.6564 8.99981L22.4849 11.8282ZM21.542 10.8856C21.0213 11.4062 20.1771 11.4062 19.6564 10.8855L22.4849 8.05709C21.4436 7.0158 19.7553 7.01571 18.7139 8.05687L21.542 10.8856Z" fill="black" mask="url(#path-4-inside-1_832_899)"/>
+              </svg>
+            </button>
         </div>
-        <div className="grid grid-cols-3 gap-4">
-          {Array.isArray(characters) && characters.map((character, index) => (
-            <div
-              key={index}
-              className="cursor-pointer text-center"
-              onClick={() => {
-                onSelectCharacter(character);
-                onClose();
-              }}
-            >
-              <img src={character.image} alt={character.name} className="w-20 h-20 mx-auto rounded-full" />
-              <p className='text-white'>{character.name}</p>
+        <input 
+          type="text" 
+          placeholder="Search by name or category..." 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full p-2 px-4 mt-4 mb-4 rounded-full focus:border-[#FFD613] border-2"
+        />
+        <div className='max-h-[60vh] m-8 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-[#FFD613] scrollbar-track-black'>
+          {Object.keys(filteredGroupedCharacters).map((category, index) => (
+            <div key={index}>
+              <div className='flex items-center py-4'>
+                <div className="flex-grow h-px bg-gray-400"></div>
+                  <h3 className="text-white text-center flex-shrink text-md px-4 font-light my-2">{category}</h3>
+                <div className="flex-grow h-px bg-gray-400"></div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                {filteredGroupedCharacters[category].map((character, charIndex) => (
+                  <div
+                    key={charIndex}
+                    className="cursor-pointer text-center"
+                    onClick={() => {
+                      onSelectCharacter(character);
+                      onClose();
+                    }}
+                  >
+                    <img src={character.image} alt={character.name} className="w-16 h-16 mx-auto rounded-full border-4 border-[#FFD613]/70" />
+                    <p className='text-white'>{character.name}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
+        </div>
+        <div>
+          <p className='text-white'>
+            If you want a character added, please open an issue at the Github Repo or message me on Discord. 
+          </p>
         </div>
       </div>
     </div>
@@ -222,6 +273,8 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [profileSide, setProfileSide] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [LeftNameChangeModalOpen, setLeftNameChangeModalOpen] = useState(false);
+  const [RightNameChangeModalOpen, setRightNameChangeModalOpen] = useState(false);
   const [editMessageIndex, setEditMessageIndex] = useState(null);
   const [editMessageContent, setEditMessageContent] = useState('');
   const [isChangingColorsEnabled, setIsChangingColorsEnabled] = useState(true);
@@ -229,6 +282,7 @@ const App = () => {
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropDownExportOptionsOpen, setIsDropDownExportOptionsOpen] = useState(false);
+  const [newName, setNewName] = useState('');
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -388,8 +442,27 @@ const App = () => {
     const updatedProfiles = leftProfiles.filter((_, i) => i !== index);
     setLeftProfiles(updatedProfiles);
   };
-  
 
+  const OpenLeftNameChangeModal = () => {
+    setLeftNameChangeModalOpen(!LeftNameChangeModalOpen);
+  };
+
+  const OpenRightNameChangeModal = () => {
+    setRightNameChangeModalOpen(!RightNameChangeModalOpen);
+  };
+
+  const handleLeftNameChange = () => {
+    setLeftName(newName);
+    setNewName('');
+    setLeftNameChangeModalOpen(false);
+  };
+
+  const handleRightNameChange = () => {
+    setRightName(newName);
+    setNewName('');
+    setRightNameChangeModalOpen(false);
+    console.log(newName, rightName);
+  };
 
   const exportChat = () => {
     const targetDiv = document.getElementById('main-chat-window');
@@ -461,7 +534,7 @@ const App = () => {
   };
 
   return (
-    <div className="App flex h-max bg-gray-800">
+    <div className="App flex h-max bg-gray-800 scroll-smooth">
       <div className={`w-full h-full overflow-hidden fixed top-0 left-0 bg-[url('/assets/BG_background_ZZZChat_with_pattern.png')] bg-opacity-50 bg-gray-800` }/>
       <div className={`hidden ${isAnimatedBackgroundEnabled ? 'md:block' : 'hidden'} fixed top-0 left-0 w-full h-full bg-gray-600 overflow-hidden`}>
         <div id="scroll-container" className='w-screen h-auto overflow-hidden transform -rotate-[30deg]'>
@@ -514,20 +587,20 @@ const App = () => {
             <div className="profiles w-full lg:w-1/4 flex flex-col bg-black/80 p-4 md:mx-2 my-2 rounded-xl min-h-[90vh]">
               <div className='p-4 rounded-xl my-0 py-0'>
               <div className='flex flex-row bg-gray-600/40 rounded-full'>
-                  <button className={`flex place-content-center w-1/3 rounded-full bg-transparent hover:bg-red-400`}>
-                    <img src="/assets/icons/ZZZ_agent_profile_icon.png" alt='Agent Profile Icon' className="w-auto auto max-h-8" />
+                  <button className={`flex place-content-center w-1/3 rounded-full bg-transparent hover:bg-red-400 outline-none hover:outline-none active:outline-none border-none hover:border-none`}>
+                    <img src="/assets/icons/ZZZ_agent_profile_icon.png" alt='Agent Profile Icon' className="w-auto auto max-h-8 cursor-not-allowed" />
                   </button>
                   <button className={`flex place-content-center w-1/3 rounded-full ${isAnimatedBackgroundEnabled && !isGroupDM ? 'animate-color-change' : !isGroupDM && !isAnimatedBackgroundEnabled ? 'bg-[#FFD613]' : 'bg-transparent'} outline-none focus:outline-none active:outline-none hover:border-[#FFD613]`} onClick={() => setIsGroupDM(false)}>
-                    <img src="/assets/icons/ZZZ_dm_icon.png" alt='Agent Profile Icon' className={`w-auto auto max-h-8 ${isGroupDM ? 'invert' : 'invert-0'}`} />
+                    <img src="/assets/icons/ZZZ_dm_icon.png" alt='DM Icon' className={`w-auto auto max-h-8 ${isGroupDM ? 'invert' : 'invert-0'}`} />
                   </button>
                   <button className={`flex place-content-center w-1/3 rounded-full ${isAnimatedBackgroundEnabled && isGroupDM ? 'animate-color-change' : isGroupDM && !isAnimatedBackgroundEnabled ? 'bg-[#FFD613]' : 'bg-transparent'} outline-none focus:outline-none active:outline-none hover:border-[#FFD613]`} onClick={() => setIsGroupDM(true)}>
-                    <img src="/assets/icons/ZZZ_group_chat_icon.png" alt='Agent Profile Icon' className={`w-auto auto max-h-8 ${!isGroupDM ? 'invert' : 'invert-0'}`} />
+                    <img src="/assets/icons/ZZZ_group_chat_icon.png" alt='Group Chat Icon' className={`w-auto auto max-h-8 ${!isGroupDM ? 'invert' : 'invert-0'}`} />
                   </button>
               </div>
-              <div class="flex items-center py-4">
-                <div class="flex-grow h-px bg-gray-400"></div> 
-                <span class="flex-shrink text-md text-gray-500 px-4 font-light">Choose</span>
-                <div class="flex-grow h-px bg-gray-400"></div>
+              <div className="flex items-center py-4">
+                <div className="flex-grow h-px bg-gray-400"></div> 
+                <span className="flex-shrink text-md text-gray-500 px-4 font-light">Choose</span>
+                <div className="flex-grow h-px bg-gray-400"></div>
               </div>
                 <h3 className='py-2 font-medium text-white/50'>Messaging</h3>
                 {isGroupDM ? (
@@ -556,7 +629,7 @@ const App = () => {
                     {leftProfile ? (
                       <button onClick={() => openCharacterModal('left')} className={`group flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
                         <div className='flex items-center rounded-full'>
-                          <img src={leftProfile} alt={leftName} className="w-12 h-12 rounded-full" />
+                          <img src={leftProfile} alt={leftName} className="w-12 h-12 rounded-full border-black border-2" />
                           <div className='flex flex-col text-left ml-4'>
                             <span className='text-xl'>{leftName}</span>
                             <span className='text-sm text-gray-500/60 block group-hover:hidden'>
@@ -576,7 +649,7 @@ const App = () => {
                         <div className='flex items-center rounded-full'>
                           <img src="characters/Wise.png" alt="Wise - Default profile" className="w-12 h-12 rounded-full border-black border-2" />
                           <div className='flex flex-col text-left ml-4'>
-                            <span className='text-xl'>Untitled</span>
+                            <span className='text-xl'>{leftName}</span>
                             <span className='text-sm text-gray-500/60'>Click to switch</span>
                           </div>
                         </div>
@@ -589,8 +662,39 @@ const App = () => {
                       </svg>
                       <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Upload custom avatar</span>
                     </label>
+                    <label className='flex items-center justify-center m-2 p-2 text-gray-600 rounded-xl cursor-pointer group'>
+                      <button className='hidden' onClick={() => OpenLeftNameChangeModal()}></button>
+                        <svg className="group-hover:stroke-[#FFD613] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                        </svg>
+                      <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Rename character</span>
+                    </label>
                   </div>
                 )}
+                {LeftNameChangeModalOpen && (
+                  <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
+                    <div className="bg-black p-6 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg">
+                      <div className='flex items-center'>
+                        <h2 className="text-lg font-bold flex-grow text-white">Rename Character {profileSide}</h2>
+                        <button onClick={OpenLeftNameChangeModal} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
+                          <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
+                              <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
+                              <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                              <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                              <mask id="path-4-inside-1_832_899" fill="white">
+                                <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
+                              </mask>
+                              <path className="group-hover:fill-[#BF2005]" d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z" fill="black"/>
+                              <path className="group-hover:fill-[#BF2005]" d="M17.7707 11.828L16.3565 13.2422L17.7705 14.6563L19.1847 13.2424L17.7707 11.828ZM16.828 12.7707L18.2422 14.1849L19.6564 12.7707L18.2422 11.3565L16.828 12.7707ZM17.7707 13.7133L19.1847 12.299L17.7705 10.8851L16.3565 12.2991L17.7707 13.7133ZM18.714 12.7707L17.2998 11.3565L15.8856 12.7707L17.2998 14.1849L18.714 12.7707ZM20.128 16.0701L18.7139 17.4845L20.128 16.0701ZM14.4713 15.1273L13.0571 13.7131L14.4713 15.1273ZM18.7139 8.05687L16.3566 10.4136L19.1847 13.2424L21.542 10.8856L18.7139 8.05687ZM19.1849 10.4138L16.8282 8.05712L13.9998 10.8855L16.3565 13.2422L19.1849 10.4138ZM13.0571 11.8282L15.4138 14.1849L18.2422 11.3565L15.8855 8.99979L13.0571 11.8282ZM15.4138 11.3565L13.0571 13.7131L15.8855 16.5415L18.2422 14.1849L15.4138 11.3565ZM16.8282 17.4842L19.1849 15.1275L16.3565 12.2991L13.9998 14.6558L16.8282 17.4842ZM16.3566 15.1277L18.7139 17.4845L21.542 14.6557L19.1847 12.299L16.3566 15.1277ZM22.4849 13.7131L20.1282 11.3565L17.2998 14.1849L19.6564 16.5415L22.4849 13.7131ZM20.1282 14.1849L22.4849 11.8282L19.6564 8.99981L17.2998 11.3565L20.1282 14.1849ZM22.4849 17.4842C23.5262 16.4429 23.5262 14.7545 22.4849 13.7131L19.6564 16.5415C19.1357 16.0208 19.1357 15.1765 19.6564 14.6558L22.4849 17.4842ZM18.7139 17.4845C19.7553 18.5256 21.4436 18.5255 22.4849 17.4842L19.6564 14.6558C20.1771 14.1351 21.0213 14.1351 21.542 14.6557L18.7139 17.4845ZM13.0571 17.4842C14.0985 18.5256 15.7869 18.5256 16.8282 17.4842L13.9998 14.6558C14.5205 14.135 15.3648 14.135 15.8855 14.6558L13.0571 17.4842ZM13.0571 8.05712C12.0158 9.09848 12.0158 10.7869 13.0571 11.8282L15.8855 8.99979C16.4063 9.52052 16.4063 10.3648 15.8855 10.8855L13.0571 8.05712ZM16.8282 8.05712C15.7869 7.01576 14.0985 7.01576 13.0571 8.05712L15.8855 10.8855C15.3648 11.4063 14.5205 11.4063 13.9998 10.8855L16.8282 8.05712ZM13.0571 13.7131C12.0158 14.7545 12.0158 16.4429 13.0571 17.4842L15.8855 14.6558C16.4063 15.1765 16.4063 16.0208 15.8855 16.5415L13.0571 13.7131ZM22.4849 11.8282C23.5262 10.7869 23.5262 9.09846 22.4849 8.05709L19.6564 10.8855C19.1357 10.3648 19.1357 9.52054 19.6564 8.99981L22.4849 11.8282ZM21.542 10.8856C21.0213 11.4062 20.1771 11.4062 19.6564 10.8855L22.4849 8.05709C21.4436 7.0158 19.7553 7.01571 18.7139 8.05687L21.542 10.8856Z" fill="black" mask="url(#path-4-inside-1_832_899)"/>
+                            </svg>
+                        </button>
+                      </div>
+                      <input className='rounded-full p-2 w-full' type="text" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Enter character name"/>
+                      <button className={`rounded-full w-full p-2 mt-4 ${isChangingColorsEnabled ? 'animate-color-change' : ''}`} onClick={handleLeftNameChange}>Rename</button>
+                    </div>
+                  </div>
+                  )}
               </div>
               <div className='p-4 rounded-xl my-0 py-0'>
                 <h3 className='py-2 font-medium text-white/50'>as</h3>
@@ -617,7 +721,7 @@ const App = () => {
                     <div className='flex items-center rounded-full'>
                       <img src="/characters/Belle.png" alt="Belle - Default Profile" className="w-12 h-12 rounded-full border-black border-2" />
                       <div className='flex flex-col text-left ml-4'>
-                        <span className='text-xl'>Untitled</span>
+                        <span className='text-xl'>{rightName}</span>
                         <span className='text-sm text-gray-500/60'>Click to switch</span>
                       </div>
                     </div>
@@ -630,7 +734,38 @@ const App = () => {
                   </svg>
                   <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Upload custom avatar</span>
                 </label>
+                <label className='flex items-center justify-center m-2 p-2 text-gray-600 rounded-xl cursor-pointer group'>
+                  <button className='hidden' onClick={() => OpenRightNameChangeModal()}></button>
+                  <svg className="group-hover:stroke-[#FFD613] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                  </svg>
+                  <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Rename character</span>
+                </label>
               </div>
+              {RightNameChangeModalOpen && (
+                <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
+                  <div className="bg-black p-6 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg">
+                    <div className='flex items-center'>
+                      <h2 className="text-lg font-bold flex-grow text-white">Rename Character {profileSide}</h2>
+                      <button onClick={OpenRightNameChangeModal} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
+                        <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
+                            <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
+                            <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                            <mask id="path-4-inside-1_832_899" fill="white">
+                              <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
+                            </mask>
+                            <path className="group-hover:fill-[#BF2005]" d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z" fill="black"/>
+                            <path className="group-hover:fill-[#BF2005]" d="M17.7707 11.828L16.3565 13.2422L17.7705 14.6563L19.1847 13.2424L17.7707 11.828ZM16.828 12.7707L18.2422 14.1849L19.6564 12.7707L18.2422 11.3565L16.828 12.7707ZM17.7707 13.7133L19.1847 12.299L17.7705 10.8851L16.3565 12.2991L17.7707 13.7133ZM18.714 12.7707L17.2998 11.3565L15.8856 12.7707L17.2998 14.1849L18.714 12.7707ZM20.128 16.0701L18.7139 17.4845L20.128 16.0701ZM14.4713 15.1273L13.0571 13.7131L14.4713 15.1273ZM18.7139 8.05687L16.3566 10.4136L19.1847 13.2424L21.542 10.8856L18.7139 8.05687ZM19.1849 10.4138L16.8282 8.05712L13.9998 10.8855L16.3565 13.2422L19.1849 10.4138ZM13.0571 11.8282L15.4138 14.1849L18.2422 11.3565L15.8855 8.99979L13.0571 11.8282ZM15.4138 11.3565L13.0571 13.7131L15.8855 16.5415L18.2422 14.1849L15.4138 11.3565ZM16.8282 17.4842L19.1849 15.1275L16.3565 12.2991L13.9998 14.6558L16.8282 17.4842ZM16.3566 15.1277L18.7139 17.4845L21.542 14.6557L19.1847 12.299L16.3566 15.1277ZM22.4849 13.7131L20.1282 11.3565L17.2998 14.1849L19.6564 16.5415L22.4849 13.7131ZM20.1282 14.1849L22.4849 11.8282L19.6564 8.99981L17.2998 11.3565L20.1282 14.1849ZM22.4849 17.4842C23.5262 16.4429 23.5262 14.7545 22.4849 13.7131L19.6564 16.5415C19.1357 16.0208 19.1357 15.1765 19.6564 14.6558L22.4849 17.4842ZM18.7139 17.4845C19.7553 18.5256 21.4436 18.5255 22.4849 17.4842L19.6564 14.6558C20.1771 14.1351 21.0213 14.1351 21.542 14.6557L18.7139 17.4845ZM13.0571 17.4842C14.0985 18.5256 15.7869 18.5256 16.8282 17.4842L13.9998 14.6558C14.5205 14.135 15.3648 14.135 15.8855 14.6558L13.0571 17.4842ZM13.0571 8.05712C12.0158 9.09848 12.0158 10.7869 13.0571 11.8282L15.8855 8.99979C16.4063 9.52052 16.4063 10.3648 15.8855 10.8855L13.0571 8.05712ZM16.8282 8.05712C15.7869 7.01576 14.0985 7.01576 13.0571 8.05712L15.8855 10.8855C15.3648 11.4063 14.5205 11.4063 13.9998 10.8855L16.8282 8.05712ZM13.0571 13.7131C12.0158 14.7545 12.0158 16.4429 13.0571 17.4842L15.8855 14.6558C16.4063 15.1765 16.4063 16.0208 15.8855 16.5415L13.0571 13.7131ZM22.4849 11.8282C23.5262 10.7869 23.5262 9.09846 22.4849 8.05709L19.6564 10.8855C19.1357 10.3648 19.1357 9.52054 19.6564 8.99981L22.4849 11.8282ZM21.542 10.8856C21.0213 11.4062 20.1771 11.4062 19.6564 10.8855L22.4849 8.05709C21.4436 7.0158 19.7553 7.01571 18.7139 8.05687L21.542 10.8856Z" fill="black" mask="url(#path-4-inside-1_832_899)"/>
+                          </svg>
+                      </button>
+                    </div>
+                    <input className='rounded-full p-2 w-full' type="text" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Enter character name" />
+                    <button className={`rounded-full w-full p-2 mt-4 ${isChangingColorsEnabled ? 'animate-color-change' : ''}`} onClick={handleRightNameChange}>Rename</button>
+                  </div>
+                </div>
+              )}
               <div class="flex items-center py-4">
                 <div class="flex-grow h-px bg-gray-400"></div> 
                 <span class="flex-shrink text-md text-gray-500 px-4 font-light">Info</span>
@@ -772,7 +907,7 @@ const App = () => {
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Type a message [and press Enter or click Send]"
-                    className="border p-3 mr-2 rounded-full w-full max-h-16 min-h-[50px] outline-none active:outline-none text-sm md:text-base border-gray-300 focus:ring-[#1c55e3] focus:border-[#1c55e3]"
+                    className="border p-3 mr-2 rounded-full w-full max-h-16 min-h-[50px] break-words overflow-auto outline-none active:outline-none text-sm md:text-base border-gray-300 focus:ring-[#1c55e3] focus:border-[#1c55e3]"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
@@ -827,7 +962,7 @@ const App = () => {
                       </button>
                       {isDropdownOpen && (
                         <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
-                          <div class="bg-black p-6 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg z-10 absolute divide-y divide-gray-100 shadow">
+                          <div class="bg-black p-6 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg z-10 absolute divide-y divide-gray-100 shadow text-left">
                           <div className='flex items-center'>
                             <h2 className="text-lg font-bold tracking-wider mb-4 text-white flex-grow">Settings</h2>
                             <button onClick={toggleDropdown} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">

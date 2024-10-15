@@ -1,30 +1,87 @@
 [
     {
-      "name": "Anby Demara",
-      "image": "/characters/AnbyDemara.png"
-    },
-    {
-      "name": "Jane Doe",
-      "image": "/characters/JaneDoe.png"
-    },
-    {
       "name": "Wise",
-      "image": "/characters/Wise.png"
+      "image": "/characters/Wise.png",
+      "category": "Phaethon"
     },
     {
       "name": "Belle",
-      "image": "/characters/Belle.png"
+      "image": "/characters/Belle.png",
+      "category": "Phaethon"
+    },
+    {
+      "name": "Anby Demara",
+      "image": "/characters/AnbyDemara.png",
+      "category": "Cunning Hares"
+    },
+    {
+      "name": "Nicole Demara",
+      "image": "/characters/NicoleDemara.png",
+      "category": "Cunning Hares"
+    },
+    {
+      "name": "Billy Kid",
+      "image": "/characters/BillyKid.png",
+      "category": "Cunning Hares"
+    },
+    {
+      "name": "Nekomiya Mana",
+      "image": "/characters/temp/NekomiyaMana.png",
+      "category": "Cunning Hares"
+    },
+    {
+      "name": "Anton Ivanov",
+      "image": "/characters/AntonIvanov.png",
+      "category": "Belobog Heavy Industries"
+    },
+    {
+      "name": "Ben Bigger",
+      "image": "/characters/BenBigger.png",
+      "category": "Belobog Heavy Industries"
+    },
+    {
+      "name": "Grace Howard",
+      "image": "/characters/GraceHoward.png",
+      "category": "Belobog Heavy Industries"
+    },
+    {
+      "name": "Koleda Belobog",
+      "image": "/characters/Koleda.png",
+      "category": "Belobog Heavy Industries"
     },
     {
       "name": "Corin Wickes",
-      "image": "/characters/CorinWickes.png"
+      "image": "/characters/CorinWickes.png",
+      "category": "Victoria Housekeeping"
+    },
+    {
+      "name": "Von Lycaon",
+      "image": "/characters/VonLycaon.png",
+      "category": "Victoria Housekeeping"
+    },
+    {
+      "name": "Ellen Joe",
+      "image": "/characters/EllenJoe.png",
+      "category": "Victoria Housekeeping"
+    },
+    {
+      "name": "Alexandrina Sebastiane",
+      "image": "/characters/AlexandrinaSebastiane.png",
+      "category":"Victoria Housekeeping"
+    },
+    {
+      "name": "Jane Doe",
+      "image": "/characters/JaneDoe.png",
+      "category": "Criminal Investigation Special Response Team"
     },
     {
       "name": "Lucy",
-      "image": "/characters/Lucy.png"
+      "image": "/characters/Lucy.png",
+      "category": "Sons of Calydon"
     },
     {
       "name": "Piper Wheel",
-      "image": "/characters/PiperWheel.png"
+      "image": "/characters/PiperWheel.png",
+      "category": "Sons of Calydon"
     }
   ]
