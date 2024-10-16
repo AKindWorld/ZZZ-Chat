@@ -7,7 +7,7 @@ const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    axios.get('../src/data/characters.json')
+    axios.get('assets/data/characters.json')
       .then(response => {
         const charactersWithCategory = response.data;
         setCharacters(charactersWithCategory);
@@ -17,14 +17,14 @@ const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
       });
   }, []);
 
-  const groupedCharacters = characters.reduce((groups, character) => {
+  const groupedCharacters = Array.isArray(characters) ? characters.reduce((groups, character) => {
     const category = character.category;
     if (!groups[category]) {
       groups[category] = [];
     }
     groups[category].push(character);
     return groups;
-  }, {});
+  }, {}) : {};
 
   const filteredGroupedCharacters = Object.keys(groupedCharacters).reduce((result, category) => {
     const filteredCharacters = groupedCharacters[category].filter(character => 
@@ -46,15 +46,15 @@ const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50 scroll-smooth">
-      <div className="bg-black p-6 rounded-xl w-full m-4 md:w-3/5 h-screen">
+      <div className="bg-black p-6 rounded-xl w-full m-0 md:m-4 md:w-3/5 h-screen">
         <div className='flex items-center'>
           <h2 className="text-lg font-bold flex-grow text-white">Choose a Character for {side}</h2>
           <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
             <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
-                <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
-                <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
-                <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fillOpacity="0.2"/>
+                <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
                 <mask id="path-4-inside-1_832_899" fill="white">
                   <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
                 </mask>
@@ -70,37 +70,38 @@ const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full p-2 px-4 mt-4 mb-4 rounded-full focus:border-[#FFD613] border-2"
         />
-        <div className='max-h-[60vh] m-8 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-[#FFD613] scrollbar-track-black'>
+        <div className='max-h-[75vh] p-2 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-[#FFD613] scrollbar-track-black'>
           {Object.keys(filteredGroupedCharacters).map((category, index) => (
-            <div key={index}>
-              <div className='flex items-center py-4'>
-                <div className="flex-grow h-px bg-gray-400"></div>
-                  <h3 className="text-white text-center flex-shrink text-md px-4 font-light my-2">{category}</h3>
-                <div className="flex-grow h-px bg-gray-400"></div>
-              </div>
+              <div key={index}>
+                <div className='flex items-center py-4'>
+                  <div className="flex-grow h-px bg-gray-400"></div>
+                    <h3 className="text-white text-center flex-shrink text-md px-4 font-light my-2">{category}</h3>
+                  <div className="flex-grow h-px bg-gray-400"></div>
+                </div>
 
-              <div className="grid grid-cols-3 gap-4">
-                {filteredGroupedCharacters[category].map((character, charIndex) => (
-                  <div
-                    key={charIndex}
-                    className="cursor-pointer text-center"
-                    onClick={() => {
-                      onSelectCharacter(character);
-                      onClose();
-                    }}
-                  >
-                    <img src={character.image} alt={character.name} className="w-16 h-16 mx-auto rounded-full border-4 border-[#FFD613]/70" />
-                    <p className='text-white'>{character.name}</p>
-                  </div>
-                ))}
+                <div className="grid grid-cols-3 gap-4">
+                  {filteredGroupedCharacters[category].map((character, charIndex) => (
+                    <div
+                      key={charIndex}
+                      className="cursor-pointer text-center"
+                      onClick={() => {
+                        onSelectCharacter(character);
+                        onClose();
+                      }}
+                    >
+                      <img src={character.image} alt={character.name} className="w-16 h-16 mx-auto rounded-full border-4 border-[#FFD613]/70" />
+                      <p className='text-white'>{character.name}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
           ))}
-        </div>
-        <div>
-          <p className='text-white'>
-            If you want a character added, please open an issue at the Github Repo or message me on Discord. 
-          </p>
+            <div className="flex flex-col md:flex-row justify-center items-center bg-[#FFD613] p-2 rounded-lg mt-4">
+              <img src="assets/media/CorinSticker01.png" alt="Corin Sticker" className="w-16 h-16 mx-2" />
+              <p className='text-black px-4 text-sm md:text-md'>
+                If you want an Agent or NPC added permanently, please open an issue at the <a href='https://github.com/AKindWorld/ZZZ-Chat/issues'>Github Repo</a> or message me [Discord <span className='text-gray-700'>@auraolis</span> or Reddit <a href='https://reddit.com/u/FireWaterAirEarthMe'><span className='text-gray-700'>FireWaterAirEarthMe</span></a>]. 
+              </p>
+            </div>
         </div>
       </div>
     </div>
@@ -111,7 +112,7 @@ const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
 const UserAddedMessage = ({ message }) => <div className='rounded-full p-2 px-4 text-white '>
     <div className='flex items-center place-content-center'>
       <svg className="mx-2 size-[5]" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle className="stroke-white" cx="10" cy="10" r="9" stroke="#FFF" stroke-width="2"/>
+        <circle className="stroke-white" cx="10" cy="10" r="9" stroke="#FFF" strokeWidth="2"/>
         <path className="fill-white" d="M8 4.5C8 4.22386 8.22386 4 8.5 4H11.5C11.7761 4 12 4.22386 12 4.5V11.5C12 11.7761 11.7761 12 11.5 12H8.5C8.22386 12 8 11.7761 8 11.5V4.5Z" fill="#00A2FF"/>
         <path className="fill-white"  d="M8 13.5C8 13.2239 8.22386 13 8.5 13H11.5C11.7761 13 12 13.2239 12 13.5V15.5C12 15.7761 11.7761 16 11.5 16H8.5C8.22386 16 8 15.7761 8 15.5V13.5Z" fill="#00A2FF"/>
       </svg>
@@ -157,9 +158,9 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
               <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                   <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
-                    <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
-                    <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                    <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fillOpacity="0.2"/>
+                    <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
                     <mask id="path-4-inside-1_832_899" fill="white">
                       <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
                     </mask>
@@ -188,18 +189,18 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
               <div className="text-white flex flex-row items-center">
                 <button onClick={() => setEditingMessageIndex(null)} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                 <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path className="group-hover:fill-[#BF2005]" d="M26.25 2H8.69062C4.83488 2 2.43011 6.17978 4.36808 9.51309L9.60826 18.5262C11.3985 21.6054 14.6915 23.5 18.2533 23.5H26.25C32.1871 23.5 37 18.6871 37 12.75C37 6.81294 32.1871 2 26.25 2Z" fill="black" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                  <path className="group-hover:fill-[#BF2005]" d="M26.25 2H8.69062C4.83488 2 2.43011 6.17978 4.36808 9.51309L9.60826 18.5262C11.3985 21.6054 14.6915 23.5 18.2533 23.5H26.25C32.1871 23.5 37 18.6871 37 12.75C37 6.81294 32.1871 2 26.25 2Z" fill="black" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
                   <path className="fill-[#BF2005] group-hover:fill-white" d="M15.076 10.0506C15.1517 10.2334 15.2799 10.3896 15.4444 10.4995C15.6088 10.6094 15.8022 10.668 16 10.668H22.6667V8.66797H18.414L19.0407 8.0413C19.2228 7.85261 19.3234 7.59996 19.321 7.33777C19.3186 7.07557 19.2133 6.82481 19.0278 6.63949C18.8424 6.45416 18.5915 6.34911 18.3293 6.34696C18.0671 6.34481 17.8145 6.44572 17.626 6.62797L15.2927 8.9613C15.1529 9.10113 15.0578 9.27924 15.0192 9.47312C14.9806 9.66701 15.0004 9.86798 15.076 10.0506Z" fill="#BF2005"/>
-                  <path className="fill-[#BF2005] group-hover:fill-white" fill-rule="evenodd" clip-rule="evenodd" d="M15.076 9.2853C15.1517 9.10255 15.2799 8.94636 15.4444 8.83647C15.6088 8.72659 15.8022 8.66795 16 8.66797H22.6667C23.9928 8.66797 25.2645 9.19475 26.2022 10.1324C27.1399 11.0701 27.6667 12.3419 27.6667 13.668C27.6667 14.9941 27.1399 16.2658 26.2022 17.2035C25.2645 18.1412 23.9928 18.668 22.6667 18.668H20.6667C20.4015 18.668 20.1471 18.5626 19.9596 18.3751C19.772 18.1875 19.6667 17.9332 19.6667 17.668C19.6667 17.4028 19.772 17.1484 19.9596 16.9609C20.1471 16.7733 20.4015 16.668 20.6667 16.668H22.6667C23.4623 16.668 24.2254 16.3519 24.788 15.7893C25.3506 15.2267 25.6667 14.4636 25.6667 13.668C25.6667 12.8723 25.3506 12.1093 24.788 11.5466C24.2254 10.984 23.4623 10.668 22.6667 10.668H18.414L19.0407 11.2946C19.2228 11.4833 19.3234 11.736 19.321 11.9982C19.3186 12.2604 19.2133 12.5111 19.0278 12.6965C18.8424 12.8818 18.5915 12.9868 18.3293 12.989C18.0671 12.9911 17.8145 12.8902 17.626 12.708L15.2927 10.3746C15.1529 10.2348 15.0578 10.0567 15.0192 9.86281C14.9806 9.66893 15.0004 9.46796 15.076 9.2853Z" fill="#BF2005"/>
+                  <path className="fill-[#BF2005] group-hover:fill-white" fillRule="evenodd" clipRule="evenodd" d="M15.076 9.2853C15.1517 9.10255 15.2799 8.94636 15.4444 8.83647C15.6088 8.72659 15.8022 8.66795 16 8.66797H22.6667C23.9928 8.66797 25.2645 9.19475 26.2022 10.1324C27.1399 11.0701 27.6667 12.3419 27.6667 13.668C27.6667 14.9941 27.1399 16.2658 26.2022 17.2035C25.2645 18.1412 23.9928 18.668 22.6667 18.668H20.6667C20.4015 18.668 20.1471 18.5626 19.9596 18.3751C19.772 18.1875 19.6667 17.9332 19.6667 17.668C19.6667 17.4028 19.772 17.1484 19.9596 16.9609C20.1471 16.7733 20.4015 16.668 20.6667 16.668H22.6667C23.4623 16.668 24.2254 16.3519 24.788 15.7893C25.3506 15.2267 25.6667 14.4636 25.6667 13.668C25.6667 12.8723 25.3506 12.1093 24.788 11.5466C24.2254 10.984 23.4623 10.668 22.6667 10.668H18.414L19.0407 11.2946C19.2228 11.4833 19.3234 11.736 19.321 11.9982C19.3186 12.2604 19.2133 12.5111 19.0278 12.6965C18.8424 12.8818 18.5915 12.9868 18.3293 12.989C18.0671 12.9911 17.8145 12.8902 17.626 12.708L15.2927 10.3746C15.1529 10.2348 15.0578 10.0567 15.0192 9.86281C14.9806 9.66893 15.0004 9.46796 15.076 9.2853Z" fill="#BF2005"/>
                 </svg>
                 </button>
                 <span className='p-2 pl-4 text-lg font-bold tracking-wider text-white flex-grow'>Customize message</span>
                 <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                   <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
-                    <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
-                    <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                    <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fillOpacity="0.2"/>
+                    <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
                     <mask id="path-4-inside-1_832_899" fill="white">
                       <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
                     </mask>
@@ -277,12 +278,30 @@ const App = () => {
   const [RightNameChangeModalOpen, setRightNameChangeModalOpen] = useState(false);
   const [editMessageIndex, setEditMessageIndex] = useState(null);
   const [editMessageContent, setEditMessageContent] = useState('');
-  const [isChangingColorsEnabled, setIsChangingColorsEnabled] = useState(true);
-  const [isAnimatedBackgroundEnabled, setIsAnimatedBackgroundEnabled] = useState(true);
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropDownExportOptionsOpen, setIsDropDownExportOptionsOpen] = useState(false);
   const [newName, setNewName] = useState('');
+  const [WiderImageExportEnabled, setWiderImageExportEnabled] = useState(false);
+
+  const [isChangingColorsEnabled, setIsChangingColorsEnabled] = useState(() => {
+    const storedValue = localStorage.getItem('isChangingColorsEnabled');
+    return storedValue === null ? true : JSON.parse(storedValue);
+  });
+
+  useEffect(() => {
+    localStorage.setItem('isChangingColorsEnabled', JSON.stringify(isChangingColorsEnabled));
+  }, [isChangingColorsEnabled]);
+
+
+  const [isAnimatedBackgroundEnabled, setIsAnimatedBackgroundEnabled] = useState(() => {
+    const storedValue = localStorage.getItem('isAnimatedBackgroundEnabled');
+    return storedValue === null ? true : JSON.parse(storedValue);
+  });
+
+  useEffect(() => {
+    localStorage.setItem('isAnimatedBackgroundEnabled', JSON.stringify(isAnimatedBackgroundEnabled));
+  }, [isAnimatedBackgroundEnabled]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -467,34 +486,52 @@ const App = () => {
   const exportChat = () => {
     const targetDiv = document.getElementById('main-chat-window');
     const messageInputBarDiv = document.getElementById('message-bar-input');
+    var DivHeight = targetDiv.offsetHeight;
+    var DivWidth = targetDiv.offsetWidth;
+    console.log(DivHeight, DivWidth)
 
     if (!targetDiv) {
       console.error('Error: Main Chat Window div not found.');
       return;
     }
     targetDiv.style.borderRadius = '0px';
+    console.log(WiderImageExportEnabled)
 
     const originalPlaceholder = messageInputBarDiv.placeholder;
     messageInputBarDiv.placeholder = '';
 
-    const backgroundImage = 'url(../public/assets/BG_background_ZZZChat_with_pattern_dark-2.png)'; //TODO: need to add perfectly a tiled image later 
+    const backgroundImage = 'url(assets/BG_background_ZZZChat_with_pattern_dark-2.png)'; //TODO: need to add perfectly a tiled image later 
     targetDiv.style.backgroundImage = backgroundImage;
     targetDiv.style.backgroundSize = 'auto';
     targetDiv.style.backgroundRepeat = 'repeat';
-  
-    html2canvas(targetDiv).then((canvas) => {
-      targetDiv.style.backgroundImage = '';
-      targetDiv.style.backgroundSize = '';
-      targetDiv.style.backgroundRepeat = '';
-      targetDiv.style.borderRadius = '';
 
-      messageInputBarDiv.placeholder = originalPlaceholder;
-  
-      const link = document.createElement('a');
-      link.download = `ZZZChat ${leftName} - ${rightName} - ${new Date().toISOString()}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    });
+    if (WiderImageExportEnabled === true) {
+      targetDiv.style.width = '1500px';
+      targetDiv.style.height = 'auto';
+      console.log(targetDiv.style.width, targetDiv.style.height)
+    }
+    
+    setTimeout(() => {
+      html2canvas(targetDiv).then((canvas) => {
+        targetDiv.style.backgroundImage = '';
+        targetDiv.style.backgroundSize = '';
+        targetDiv.style.backgroundRepeat = '';
+        targetDiv.style.borderRadius = '';
+    
+        if (WiderImageExportEnabled === true) {
+          targetDiv.style.width = DivWidth + 'px';
+          targetDiv.style.height = DivHeight + 'px';
+          console.log(targetDiv.style.width, targetDiv.style.height)
+        }
+    
+        messageInputBarDiv.placeholder = originalPlaceholder;
+    
+        const link = document.createElement('a');
+        link.download = `ZZZChat ${leftName} - ${rightName} - ${new Date().toISOString()}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }, 100);
   };
   
 
@@ -534,7 +571,7 @@ const App = () => {
   };
 
   return (
-    <div className="App flex h-max bg-gray-800 scroll-smooth">
+    <div className="App flex h-max bg-gray-800 scroll-smooth scrollbar scrollbar-track-gray-800 scrollbar-thumb-[#fadc00]/80">
       <div className={`w-full h-full overflow-hidden fixed top-0 left-0 bg-[url('/assets/BG_background_ZZZChat_with_pattern.png')] bg-opacity-50 bg-gray-800` }/>
       <div className={`hidden ${isAnimatedBackgroundEnabled ? 'md:block' : 'hidden'} fixed top-0 left-0 w-full h-full bg-gray-600 overflow-hidden`}>
         <div id="scroll-container" className='w-screen h-auto overflow-hidden transform -rotate-[30deg]'>
@@ -573,28 +610,28 @@ const App = () => {
         <div className={`${isAnimatedBackgroundEnabled ? 'bg-black/90' : 'bg-black/90'} w-full max-h-max min-h-full absolute z-0`}>
           <div className='h-auto flex bg-black/90 rounded-full m-4 items-center group'>
             <svg className="ml-1 mr-2 p-1 -mt-3 group-hover:animate-wiggle" width="60" height="70" viewBox="0 0 60 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6046 34.5902C18.0785 33.5743 18.9365 32.7882 19.9899 32.4048C21.0434 32.0214 22.2059 32.0721 23.222 32.5457L23.9036 32.8632C24.4039 33.0962 24.9985 32.8798 25.232 32.3797L25.55 31.6983C25.7784 31.1855 26.1066 30.7233 26.5155 30.3387C26.9244 29.9541 27.4058 29.6548 27.9317 29.4582C28.4575 29.2616 29.0172 29.1717 29.5781 29.1938C30.1391 29.2158 30.69 29.3494 31.1988 29.5866C31.7075 29.8239 32.164 30.1601 32.5414 30.5756C32.9189 30.9911 33.2098 31.4776 33.3972 32.0068C33.5846 32.536 33.6648 33.0972 33.633 33.6576C33.6012 34.2181 33.4581 34.7666 33.212 35.2712L29.7444 42.7089C29.2776 43.7101 28.0875 44.1433 27.0864 43.6764L19.6492 40.2077C18.6332 39.7338 17.8471 38.8757 17.4637 37.8223C17.0803 36.7689 17.131 35.6063 17.6046 34.5902Z" fill="#FFD613"/>
-              <rect x="5.74702" y="24.0508" width="29.9235" height="45.3433" rx="4" transform="rotate(-20 5.74702 24.0508)" stroke="#FFD613" stroke-width="4"/>
+              <path fillRule="evenodd" clipRule="evenodd" d="M17.6046 34.5902C18.0785 33.5743 18.9365 32.7882 19.9899 32.4048C21.0434 32.0214 22.2059 32.0721 23.222 32.5457L23.9036 32.8632C24.4039 33.0962 24.9985 32.8798 25.232 32.3797L25.55 31.6983C25.7784 31.1855 26.1066 30.7233 26.5155 30.3387C26.9244 29.9541 27.4058 29.6548 27.9317 29.4582C28.4575 29.2616 29.0172 29.1717 29.5781 29.1938C30.1391 29.2158 30.69 29.3494 31.1988 29.5866C31.7075 29.8239 32.164 30.1601 32.5414 30.5756C32.9189 30.9911 33.2098 31.4776 33.3972 32.0068C33.5846 32.536 33.6648 33.0972 33.633 33.6576C33.6012 34.2181 33.4581 34.7666 33.212 35.2712L29.7444 42.7089C29.2776 43.7101 28.0875 44.1433 27.0864 43.6764L19.6492 40.2077C18.6332 39.7338 17.8471 38.8757 17.4637 37.8223C17.0803 36.7689 17.131 35.6063 17.6046 34.5902Z" fill="#FFD613"/>
+              <rect x="5.74702" y="24.0508" width="29.9235" height="45.3433" rx="4" transform="rotate(-20 5.74702 24.0508)" stroke="#FFD613" strokeWidth="4"/>
               <rect x="15.8408" y="57.6289" width="33.9235" height="12.3358" rx="6" transform="rotate(-20 15.8408 57.6289)" fill="#FFD613"/>
               <circle cx="33.8884" cy="57.6207" r="2.31297" transform="rotate(-20 33.8884 57.6207)" fill="black"/>
-              <path d="M28.6709 9.47266V9.47266C33.2723 7.79787 38.3602 10.1704 40.035 14.7718L40.2987 15.4963" stroke="#FFD613" stroke-width="3" stroke-linecap="round"/>
-              <path d="M27.0889 5.125V5.125C33.891 2.64922 41.4123 6.15643 43.888 12.9586L44.1517 13.6831" stroke="#FFD613" stroke-width="3" stroke-linecap="round"/>
+              <path d="M28.6709 9.47266V9.47266C33.2723 7.79787 38.3602 10.1704 40.035 14.7718L40.2987 15.4963" stroke="#FFD613" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M27.0889 5.125V5.125C33.891 2.64922 41.4123 6.15643 43.888 12.9586L44.1517 13.6831" stroke="#FFD613" strokeWidth="3" strokeLinecap="round"/>
             </svg>
             <h1 className='text-white text-2xl font-bold'>Knock Knock</h1>
           </div>
           <div className="chat-container flex flex-col lg:flex-row m-4">
 
             <div className="profiles w-full lg:w-1/4 flex flex-col bg-black/80 p-4 md:mx-2 my-2 rounded-xl min-h-[90vh]">
-              <div className='p-4 rounded-xl my-0 py-0'>
+              <div className='p-2 md:px-4 rounded-xl my-0 py-0'>
               <div className='flex flex-row bg-gray-600/40 rounded-full'>
                   <button className={`flex place-content-center w-1/3 rounded-full bg-transparent hover:bg-red-400 outline-none hover:outline-none active:outline-none border-none hover:border-none`}>
-                    <img src="/assets/icons/ZZZ_agent_profile_icon.png" alt='Agent Profile Icon' className="w-auto auto max-h-8 cursor-not-allowed" />
+                    <img src="assets/icons/ZZZ_agent_profile_icon.png" alt='Agent Profile Icon' className="w-auto auto max-h-8 cursor-not-allowed" />
                   </button>
                   <button className={`flex place-content-center w-1/3 rounded-full ${isAnimatedBackgroundEnabled && !isGroupDM ? 'animate-color-change' : !isGroupDM && !isAnimatedBackgroundEnabled ? 'bg-[#FFD613]' : 'bg-transparent'} outline-none focus:outline-none active:outline-none hover:border-[#FFD613]`} onClick={() => setIsGroupDM(false)}>
-                    <img src="/assets/icons/ZZZ_dm_icon.png" alt='DM Icon' className={`w-auto auto max-h-8 ${isGroupDM ? 'invert' : 'invert-0'}`} />
+                    <img src="assets/icons/ZZZ_dm_icon.png" alt='DM Icon' className={`w-auto auto max-h-8 ${isGroupDM ? 'invert' : 'invert-0'}`} />
                   </button>
                   <button className={`flex place-content-center w-1/3 rounded-full ${isAnimatedBackgroundEnabled && isGroupDM ? 'animate-color-change' : isGroupDM && !isAnimatedBackgroundEnabled ? 'bg-[#FFD613]' : 'bg-transparent'} outline-none focus:outline-none active:outline-none hover:border-[#FFD613]`} onClick={() => setIsGroupDM(true)}>
-                    <img src="/assets/icons/ZZZ_group_chat_icon.png" alt='Group Chat Icon' className={`w-auto auto max-h-8 ${!isGroupDM ? 'invert' : 'invert-0'}`} />
+                    <img src="assets/icons/ZZZ_group_chat_icon.png" alt='Group Chat Icon' className={`w-auto auto max-h-8 ${!isGroupDM ? 'invert' : 'invert-0'}`} />
                   </button>
               </div>
               <div className="flex items-center py-4">
@@ -605,11 +642,11 @@ const App = () => {
                 <h3 className='py-2 font-medium text-white/50'>Messaging</h3>
                 {isGroupDM ? (
                   <div>
-                    <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
+                    <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-2 gap-y-6">
                       {leftProfiles.length === 0 && <p className="text-white/50 col-span-3 md:col-span-4">No profiles yet. Click + to add.</p>}
                       {leftProfiles.map((profile, index) => (
                         <div key={index} className="relative group">
-                          <img src={profile.image} alt={profile.name} className="w-16 h-16 rounded-full border-4 border-[#FFD613]" />
+                          <img src={profile.image} alt={profile.name} className="w-16 h-16 rounded-full border-4 border-[#FFD613] bg-slate-200" />
                           <button 
                             className="hidden group-hover:block absolute w-full h-full top-0 left-0 rounded-full text-red-500" 
                             onClick={() => removeLeftProfile(index)}>
@@ -629,7 +666,7 @@ const App = () => {
                     {leftProfile ? (
                       <button onClick={() => openCharacterModal('left')} className={`group flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
                         <div className='flex items-center rounded-full'>
-                          <img src={leftProfile} alt={leftName} className="w-12 h-12 rounded-full border-black border-2" />
+                          <img src={leftProfile} alt={leftName} className="w-12 h-12 rounded-full border-black border-2 bg-slate-200" />
                           <div className='flex flex-col text-left ml-4'>
                             <span className='text-xl'>{leftName}</span>
                             <span className='text-sm text-gray-500/60 block group-hover:hidden'>
@@ -647,7 +684,7 @@ const App = () => {
                     ) : (
                       <button onClick={() => openCharacterModal('left')} className={`flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
                         <div className='flex items-center rounded-full'>
-                          <img src="characters/Wise.png" alt="Wise - Default profile" className="w-12 h-12 rounded-full border-black border-2" />
+                          <img src="assets/characters/Wise.png" alt="Wise - Default profile" className="w-12 h-12 rounded-full border-black border-2" />
                           <div className='flex flex-col text-left ml-4'>
                             <span className='text-xl'>{leftName}</span>
                             <span className='text-sm text-gray-500/60'>Click to switch</span>
@@ -664,9 +701,9 @@ const App = () => {
                     </label>
                     <label className='flex items-center justify-center m-2 p-2 text-gray-600 rounded-xl cursor-pointer group'>
                       <button className='hidden' onClick={() => OpenLeftNameChangeModal()}></button>
-                        <svg className="group-hover:stroke-[#FFD613] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                        </svg>
+                      <svg className="group-hover:fill-[#FFD613] fill-gray-600" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13.586 3.58714C13.7705 3.39612 13.9912 3.24375 14.2352 3.13894C14.4792 3.03412 14.7416 2.97895 15.0072 2.97664C15.2728 2.97433 15.5361 3.02493 15.7819 3.1255C16.0277 3.22606 16.251 3.37456 16.4388 3.56235C16.6266 3.75013 16.7751 3.97344 16.8756 4.21923C16.9762 4.46502 17.0268 4.72838 17.0245 4.99394C17.0222 5.2595 16.967 5.52194 16.8622 5.76595C16.7574 6.00996 16.605 6.23065 16.414 6.41514L15.621 7.20814L12.793 4.38014L13.586 3.58714ZM11.379 5.79414L3 14.1731V17.0011H5.828L14.208 8.62214L11.379 5.79414Z"/>
+                      </svg>
                       <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Rename character</span>
                     </label>
                   </div>
@@ -679,9 +716,9 @@ const App = () => {
                         <button onClick={OpenLeftNameChangeModal} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                           <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
-                              <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
-                              <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
-                              <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                              <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fillOpacity="0.2"/>
+                              <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                              <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
                               <mask id="path-4-inside-1_832_899" fill="white">
                                 <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
                               </mask>
@@ -696,12 +733,12 @@ const App = () => {
                   </div>
                   )}
               </div>
-              <div className='p-4 rounded-xl my-0 py-0'>
+              <div className='p-2 md:px-4 rounded-xl my-0 py-0'>
                 <h3 className='py-2 font-medium text-white/50'>as</h3>
                 {rightProfile ? (
                   <button onClick={() => openCharacterModal('right')} className={`group flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
                     <div className='flex items-center rounded-full'>
-                      <img src={rightProfile} alt={rightName} className="w-12 h-12 rounded-full" />
+                      <img src={rightProfile} alt={rightName} className="w-12 h-12 rounded-full bg-slate-200" />
                       <div className='flex flex-col text-left ml-4'>
                         <span className='text-xl'>{rightName}</span>
                         <span className='text-sm text-gray-500/60 block group-hover:hidden'>
@@ -719,7 +756,7 @@ const App = () => {
                 ) : (
                   <button onClick={() => openCharacterModal('right')} className={`flex items-center space-x-4 bg-[#FFD613] rounded-full p-2 w-full ${isChangingColorsEnabled ? 'animate-color-change' : ''}`}>
                     <div className='flex items-center rounded-full'>
-                      <img src="/characters/Belle.png" alt="Belle - Default Profile" className="w-12 h-12 rounded-full border-black border-2" />
+                      <img src="assets/characters/Belle.png" alt="Belle - Default Profile" className="w-12 h-12 rounded-full border-black border-2 bg-slate-200" />
                       <div className='flex flex-col text-left ml-4'>
                         <span className='text-xl'>{rightName}</span>
                         <span className='text-sm text-gray-500/60'>Click to switch</span>
@@ -736,8 +773,8 @@ const App = () => {
                 </label>
                 <label className='flex items-center justify-center m-2 p-2 text-gray-600 rounded-xl cursor-pointer group'>
                   <button className='hidden' onClick={() => OpenRightNameChangeModal()}></button>
-                  <svg className="group-hover:stroke-[#FFD613] w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                  <svg className="group-hover:fill-[#FFD613] fill-gray-600" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.586 3.58714C13.7705 3.39612 13.9912 3.24375 14.2352 3.13894C14.4792 3.03412 14.7416 2.97895 15.0072 2.97664C15.2728 2.97433 15.5361 3.02493 15.7819 3.1255C16.0277 3.22606 16.251 3.37456 16.4388 3.56235C16.6266 3.75013 16.7751 3.97344 16.8756 4.21923C16.9762 4.46502 17.0268 4.72838 17.0245 4.99394C17.0222 5.2595 16.967 5.52194 16.8622 5.76595C16.7574 6.00996 16.605 6.23065 16.414 6.41514L15.621 7.20814L12.793 4.38014L13.586 3.58714ZM11.379 5.79414L3 14.1731V17.0011H5.828L14.208 8.62214L11.379 5.79414Z"/>
                   </svg>
                   <span className='ml-2 text-sm lg:text-md group-hover:text-[#FFD613]'>Rename character</span>
                 </label>
@@ -750,9 +787,9 @@ const App = () => {
                       <button onClick={OpenRightNameChangeModal} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                         <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
-                            <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
-                            <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                            <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fillOpacity="0.2"/>
+                            <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                            <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
                             <mask id="path-4-inside-1_832_899" fill="white">
                               <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
                             </mask>
@@ -766,10 +803,10 @@ const App = () => {
                   </div>
                 </div>
               )}
-              <div class="flex items-center py-4">
-                <div class="flex-grow h-px bg-gray-400"></div> 
-                <span class="flex-shrink text-md text-gray-500 px-4 font-light">Info</span>
-                <div class="flex-grow h-px bg-gray-400"></div>
+              <div className="flex items-center py-4">
+                <div className="flex-grow h-px bg-gray-400"></div> 
+                <span className="flex-shrink text-md text-gray-500 px-4 font-light">Info</span>
+                <div className="flex-grow h-px bg-gray-400"></div>
               </div>
               <div className="">
                 <span className='text-gray-600 text-sm'>You are simulating a {isGroupDM ? "Group Chat" : "DM"} where <span className='text-[#FFD613]'>{rightName}</span> is messaging {isGroupDM ? leftProfiles.map((profile, index) => <span key={index}><span className='text-[#FFD613]'>{profile.name}</span>{index === leftProfiles.length - 1 ? '.' : ', '} </span>): <span className='text-[#FFD613]'>{leftName}</span>}</span>
@@ -808,7 +845,10 @@ const App = () => {
                       <span className='text-white/50 text-lg font-light'>Step 2: Enter your message for each sides, using the Switch button to switch between sides.</span>
                       <span className='text-white/50 text-lg font-light'>Step 3: ...</span>
                       <span className='text-white/80 text-lg font-light'>
-                        {`${leftName === "Nicole Demara" || rightName === "Nicole Demara" ? "Step 4: Profit ;)" : leftName === "Anby Demara" || rightName === "Anby Demara" ? "Step 4: Have a borgar!" : "Step 4: Have fun!"}`}
+                        {`${leftName === "Nicole Demara" || rightName === "Nicole Demara" ? "Step 4: Profit ;)" : 
+                            leftName === "Anby Demara" || rightName === "Anby Demara" ? "Step 4: Have a borgar!" : 
+                            leftName === "Fairy" || rightName === "Fairy" ? "Step 4: Have a high electricity bill!" : 
+                            leftName === "Grace Howard" || rightName === "Grace Howard" ? "Step 4: Have fun with your machines!" : "Step 4: Have fun!"}`}
                       </span>
                     </div>
                   </div>
@@ -823,7 +863,7 @@ const App = () => {
                               : (message.side === 'left' ? leftProfile : rightProfile)
                           }
                           alt="profile"
-                          className="profile-pic w-10 h-10 rounded-full mx-4 mt-4"
+                          className="profile-pic w-10 h-10 rounded-full mx-4 mt-4 bg-slate-200"
                         />
                       )}
 
@@ -855,7 +895,7 @@ const App = () => {
                       </div>
 
                       <button onClick={() => deleteMessage(index)} className={`opacity-0 group-hover:opacity-100 mx-2 border-2 border-gray-200 group-hover:border-red-500 group-hover:border-4 rounded-full py-1 px-1 text-md ${message.side === 'left' ? 'self-end' : message.side === 'right' ? 'self-end' : 'self-center'}`} >
-                        <img src='/assets/icons/ZZZ_trash_icon.png' alt="Delete Icon" />
+                        <img src='assets/icons/ZZZ_trash_icon.png' alt="Delete Icon" />
                       </button>
                     </div>
                   ))
@@ -923,7 +963,7 @@ const App = () => {
                       onChange={(e) => handleImageUpload(e, selectedSide)} 
                       className="hidden" 
                     />
-                    <img src="/assets/icons/photo_icon.png" alt="Camera Icon" height="24px" width="24px" className=""/>
+                    <img src="assets/icons/photo_icon.png" alt="Photo Icon" height="24px" width="24px" className=""/>
                   </label>
                 </div>
               </div>
@@ -937,10 +977,10 @@ const App = () => {
             </div>
           </div>
 
-          <footer class="bg-black" id="export-footer-div">
-              <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
-                <div class="sm:flex sm:items-center sm:justify-between text-center">
-                    <span class="text-sm text-gray-500 sm:text-center">
+          <footer className="bg-black" id="export-footer-div">
+              <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
+                <div className="sm:flex sm:items-center sm:justify-between text-center">
+                    <span className="text-sm text-gray-500 sm:text-center">
                       
                     </span>
                     <button className='rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]'>About</button>
@@ -962,15 +1002,15 @@ const App = () => {
                       </button>
                       {isDropdownOpen && (
                         <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
-                          <div class="bg-black p-6 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg z-10 absolute divide-y divide-gray-100 shadow text-left">
+                          <div className="bg-black p-6 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg z-10 absolute divide-y divide-gray-100 shadow text-left">
                           <div className='flex items-center'>
                             <h2 className="text-lg font-bold tracking-wider mb-4 text-white flex-grow">Settings</h2>
                             <button onClick={toggleDropdown} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                                 <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                   <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
-                                  <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fill-opacity="0.2"/>
-                                  <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" stroke-width="2" stroke-linecap="round"/>
-                                  <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" stroke-width="3" stroke-linecap="round"/>
+                                  <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fillOpacity="0.2"/>
+                                  <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                                  <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
                                   <mask id="path-4-inside-1_832_899" fill="white">
                                     <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
                                   </mask>
@@ -979,7 +1019,7 @@ const App = () => {
                                 </svg>  
                               </button>
                             </div>
-                            <ul class="p-3 px-1 space-y-1 text-sm text-gray-700" aria-labelledby="dropdownToggleButton">
+                            <ul className="p-3 px-1 space-y-1 text-sm text-gray-700" aria-labelledby="dropdownToggleButton">
                               <li>
                                 <div className="flex bg-gray-700 rounded-lg p-4 group">
                                   <label className="inline-flex items-center w-full cursor-pointer">
@@ -992,7 +1032,7 @@ const App = () => {
                                     <div className="relative w-9 min-w-9 h-5 bg-gray-500 peer-focus:outline-none peer-focus:ring-4 ring-4 ring-black rounded-full peer-checked:after:translate-x-full peer-checked:after:border-gray-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-gray-600 after:border-black after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#FFD613]"></div>
                                     <div className="flex flex-col">
                                       <span className="ms-3 text-sm font-medium text-white/80 group-hover:text-white">Flashing colors [{`${isChangingColorsEnabled === true ? "ON" : "OFF"}`}]</span>
-                                      <span className='ms-3 text-xs text-white/50 group-hover:text-white'>Some menus have color changing animations similar to the ZZZ UI. Toggle it off if you're not a fan.</span>
+                                      <span className='ms-3 text-xs text-white/50 group-hover:text-white'>Some menus have color changing animations similar to the ZZZ UI. Toggle it off if you're not a fan of it.</span>
                                     </div>
                                   </label>
                                 </div>
@@ -1009,7 +1049,24 @@ const App = () => {
                                     <div className="relative w-9 min-w-9 h-5 bg-gray-500 peer-focus:outline-none peer-focus:ring-4 ring-4 ring-black rounded-full peer-checked:after:translate-x-full peer-checked:after:border-gray-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-gray-600 after:border-black after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#FFD613]"></div>
                                     <div className="flex flex-col">
                                       <span className="ms-3 text-sm font-medium text-white/80 group-hover:text-white">Animated Background [{`${isAnimatedBackgroundEnabled === true ? "ON" : "OFF"}`}]</span>
-                                      <span className='ms-3 text-xs text-white/50 group-hover:text-white'>A similar background animation to the ZZZ DMs UI made with web elements. Toggle off to set to a static background. Does NOT work on mobile devices.</span>
+                                      <span className='ms-3 text-xs text-white/50 group-hover:text-white'>A similar background animation to the ZZZ DMs UI made with web elements. Toggle off to set to a static background. <br/>Note: Does not work on mobile devices.</span>
+                                    </div>
+                                  </label>
+                                </div>
+                              </li>
+                              <li>
+                                <div className="flex bg-gray-700 rounded-lg p-4 group">
+                                  <label className="inline-flex items-center w-full cursor-pointer">
+                                    <input
+                                      type="checkbox"
+                                      className="sr-only peer"
+                                      checked={WiderImageExportEnabled}
+                                      onChange={(e) => setWiderImageExportEnabled(e.target.checked)}
+                                    />
+                                    <div className="relative w-9 min-w-9 h-5 bg-gray-500 peer-focus:outline-none peer-focus:ring-4 ring-4 ring-black rounded-full peer-checked:after:translate-x-full peer-checked:after:border-gray-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-gray-600 after:border-black after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#FFD613]"></div>
+                                    <div className="flex flex-col">
+                                      <span className="ms-3 text-sm font-medium text-white/80 group-hover:text-white">Wide Export [{`${WiderImageExportEnabled === true ? "ON" : "OFF"}`}]</span>
+                                      <span className='ms-3 text-xs text-white/50 group-hover:text-white'>Experimental option to export images wider on smaller devices. <br/>Note: This may mess up the layout of the page.</span>
                                     </div>
                                   </label>
                                 </div>

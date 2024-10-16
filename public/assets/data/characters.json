@@ -1,0 +1,142 @@
+[
+    {
+      "name": "Wise",
+      "image": "assets/characters/Wise.png",
+      "category": "Phaethon"
+    },
+    {
+      "name": "Belle",
+      "image": "assets/characters/Belle.png",
+      "category": "Phaethon"
+    },
+    {
+      "name": "Fairy",
+      "image": "assets/characters/temp/Fairy.png",
+      "category": "Phaethon"
+    },
+    {
+      "name": "Anby Demara",
+      "image": "assets/characters/AnbyDemara.png",
+      "category": "Cunning Hares"
+    },
+    {
+      "name": "Nicole Demara",
+      "image": "assets/characters/NicoleDemara.png",
+      "category": "Cunning Hares"
+    },
+    {
+      "name": "Billy Kid",
+      "image": "assets/characters/BillyKid.png",
+      "category": "Cunning Hares"
+    },
+    {
+      "name": "Nekomiya Mana",
+      "image": "assets/characters/temp/NekomiyaMana.png",
+      "category": "Cunning Hares"
+    },
+    {
+      "name": "Anton Ivanov",
+      "image": "assets/characters/AntonIvanov.png",
+      "category": "Belobog Heavy Industries"
+    },
+    {
+      "name": "Ben Bigger",
+      "image": "assets/characters/BenBigger.png",
+      "category": "Belobog Heavy Industries"
+    },
+    {
+      "name": "Grace Howard",
+      "image": "assets/characters/temp/GraceHoward.png",
+      "category": "Belobog Heavy Industries"
+    },
+    {
+      "name": "Koleda Belobog",
+      "image": "assets/characters/temp/KoledaBelobog.png",
+      "category": "Belobog Heavy Industries"
+    },
+    {
+      "name": "Corin Wickes",
+      "image": "assets/characters/CorinWickes.png",
+      "category": "Victoria Housekeeping"
+    },
+    {
+      "name": "Von Lycaon",
+      "image": "assets/characters/VonLycaon.png",
+      "category": "Victoria Housekeeping"
+    },
+    {
+      "name": "Ellen Joe",
+      "image": "assets/characters/temp/EllenJoe.png",
+      "category": "Victoria Housekeeping"
+    },
+    {
+      "name": "Alexandrina Sebastiane",
+      "image": "assets/characters/temp/AlexandrinaSebastiane.png",
+      "category":"Victoria Housekeeping"
+    },
+    {
+      "name": "Jane Doe",
+      "image": "assets/characters/JaneDoe.png",
+      "category": "Criminal Investigation Special Response Team"
+    },
+    {
+      "name": "Seth Lowell",
+      "image": "assets/characters/SethLowell.png",
+      "category": "Criminal Investigation Special Response Team"
+    },
+    {
+      "name": "Qingyi",
+      "image": "assets/characters/Qingyi.png",
+      "category": "Criminal Investigation Special Response Team"
+    },
+    {
+      "name": "Zhu Yuan",
+      "image": "assets/characters/ZhuYuan.png",
+      "category": "Criminal Investigation Special Response Team"
+    },
+    {
+      "name": "Soldier 11",
+      "image": "assets/characters/temp/Soldier11.png",
+      "category": "Obol Squad"
+    },
+    {
+      "name": "Lucy",
+      "image": "assets/characters/Lucy.png",
+      "category": "Sons of Calydon"
+    },
+    {
+      "name": "Piper Wheel",
+      "image": "assets/characters/PiperWheel.png",
+      "category": "Sons of Calydon"
+    },
+    {
+      "name": "Caesar King",
+      "image": "assets/characters/temp/CaesarKing.png",
+      "category": "Sons of Calydon"
+    },
+    {
+      "name": "Burnice White",
+      "image": "assets/characters/temp/BurniceWhite.png",
+      "category": "Sons of Calydon"
+    },
+    {
+      "name": "Soukaku",
+      "image": "assets/characters/temp/Soukaku.png",
+      "category": "Section 6"
+    },
+    {
+      "name": "Tsukishiro Yanagi",
+      "image": "assets/characters/TsukishiroYanagi.png",
+      "category": "Unreleased"
+    },
+    {
+      "name": "Lighter",
+      "image": "assets/characters/temp/Lighter.png",
+      "category": "Unreleased"
+    },
+    {
+      "name": "Hoshimi Miyabi",
+      "image": "assets/characters/temp/HoshimiMiyabi.png",
+      "category": "Unreleased"
+    }
+  ]

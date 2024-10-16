@@ -127,7 +127,7 @@ body > div:last-child > span + img {
 
 .chat-message:not(.right-side, .system-side) .message-content::before {
   content: '';
-  background-image: url("../assets/chatbox-point-l.png");
+  background-image: url("/assets/chatbox-point-l.png");
   position: absolute;
   left: -5px;
   transform: translateY(-100%);
@@ -139,7 +139,7 @@ body > div:last-child > span + img {
 
 .chat-message:not(.left-side, .system-side) .message-content::before {
   content: '';
-  background-image: url("../assets/chatbox-point-r.png");
+  background-image: url("/assets/chatbox-point-r.png");
   position: absolute;
   right: -5px;
   transform: translateY(-100%);
