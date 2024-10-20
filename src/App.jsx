@@ -858,11 +858,11 @@ const App = () => {
                         <img src="assets/media/EllenSticker01.png" alt='Sticker' className='h-40 w-auto' />
                       </div>
                     )}
-                    <button className='text-white bg-transparent outline-none focus:outline-none hover:outline-none border-none ' onClick={() => setShowHowtoUse(!ShowHowtoUse)}>
+                    <button className='text-[#fadc00]/70 bg-transparent outline-none focus:outline-none hover:outline-none border-none ' onClick={() => setShowHowtoUse(!ShowHowtoUse)}>
                       {!ShowHowtoUse ? "So, how do I use it? ▲" : "▼ Okay, I got it!"}
                     </button>
                     <span className='text-white/80 text-base font-light mt-8'>
-                      {`${leftName === "Nicole Demara" || rightName === "Nicole Demara" ? " Profit ;)" : 
+                      {`${leftName === "Nicole Demara" || rightName === "Nicole Demara" ? "May the skies rain dennies today." : 
                           leftName === "Anby Demara" || rightName === "Anby Demara" ? " Have a borgar!" : 
                           leftName === "Fairy" || rightName === "Fairy" ? " Enjoy a high electricity bill!" : 
                           leftName === "Grace Howard" || rightName === "Grace Howard" ? " Have fun with your machines!" : " Have fun!"}`}
@@ -896,12 +896,14 @@ const App = () => {
                             </span>
                         </div>
                         <div
-                          className={`message-content flex items-center relative max-w-prose ${message.side === 'left' ? 'bg-gray-200' : message.side === 'right' ? 'bg-[#1c55e3] text-white' : message.side === 'system' ? 'bg-none text-white' : 'bg-gray-200'} py-2 px-3 ${message.type === 'text' ? 'rounded-2xl' : 'rounded-lg'}`}
+                          className={`message-content flex items-center relative max-w-prose ${message.side === 'left' ? 'bg-gray-200' : message.side === 'right' ? 'bg-[#1c55e3] text-white' : message.side === 'system' ? 'bg-none text-white' : 'bg-gray-200'} py-2 px-3 ${message.type === 'text' ? 'rounded-2xl' : 'rounded-lg'} ${message.content.length < 6 ? "justify-center" : ""}`}
                           onClick={message.type === 'text' ? () => editMessage(index) : null}
                           id={`message-${index}`}
                         >
                           {message.type === 'text' ? (
-                            <div id={`message-${index}-content`}>{message.content}</div>
+                            <div id={`message-${index}-content`} className={message.content.length < 3 ? "text-center" : "text-left"}>
+                              {message.content}
+                            </div>
                           ) : message.type === 'component' ? (
                             message.content
                           ) : (
@@ -971,7 +973,7 @@ const App = () => {
                       }
                     }}
                   />
-                  <button onClick={addMessage} className="bg-[#1c55e3] hover:bg-[#1c55e3]/75 text-white px-6 rounded-full mx-2">Send</button>
+                  <button onClick={addMessage} className="bg-[#1c55e3] hover:bg-[#1c55e3]/75 text-white px-6 rounded-full mx-2 border-4 hover:border-[#1c55e3]">Send</button>
                   <label className="flex items-center justify-center w-14 h-12 p-2 bg-gray-100 hover:bg-[#fadc00] rounded-full cursor-pointer group">
                     <input 
                       type="file" 
