@@ -282,6 +282,7 @@ const App = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropDownExportOptionsOpen, setIsDropDownExportOptionsOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+  const [ShowHowtoUse, setShowHowtoUse] = useState(false);
   const [newName, setNewName] = useState('');
   const [WiderImageExportEnabled, setWiderImageExportEnabled] = useState(false);
 
@@ -840,22 +841,32 @@ const App = () => {
               <div id="chat-container" className="mt-6 space-y-2 flex-1">
                 {messages.length === 0 ? (
                   <div className='flex flex-col items-center justify-center'>
-                    <p className='text-white/50 text-xl'>No messages yet</p>
+                    <p className='text-white/50 text-xl'>No messages yet.</p>
                     <br/>
                     <p className='text-white/50 text-2xl'>Start a conversation!</p>
                     <br/>
                     <br/>
-                    <div className='flex flex-col align-left max-w-prose'>
-                      <span className='text-white/50 text-lg font-light'>Step 1: Select the characters for both sides or upload any avatar.</span>
-                      <span className='text-white/50 text-lg font-light'>Step 2: Enter your message for each sides, using the Switch button to switch between sides.</span>
-                      <span className='text-white/50 text-lg font-light'>Step 3: ...</span>
-                      <span className='text-white/80 text-lg font-light'>
-                        {`${leftName === "Nicole Demara" || rightName === "Nicole Demara" ? "Step 4: Profit ;)" : 
-                            leftName === "Anby Demara" || rightName === "Anby Demara" ? "Step 4: Have a borgar!" : 
-                            leftName === "Fairy" || rightName === "Fairy" ? "Step 4: Have a high electricity bill!" : 
-                            leftName === "Grace Howard" || rightName === "Grace Howard" ? "Step 4: Have fun with your machines!" : "Step 4: Have fun!"}`}
-                      </span>
+                    {ShowHowtoUse ? (
+                    <div className='flex flex-col align-left max-w-prose space-y-2'>
+                      <span className='text-white/70 text-lg font-light py-1'>How to use:</span>
+                      <span className='text-white/50 text-base font-light'>1. Switch between <img src="assets/icons/ZZZ_dm_icon.png" className="w-3 mx-1 h-auto invert inline opacity-70" /> DMs or <img src="assets/icons/ZZZ_group_chat_icon.png" className="w-auto mx-1 h-4 invert inline opacity-70" /> Group-chat at the top.</span>
+                      <span className='text-white/50 text-base font-light'>2. Choose the characters you want to chat with. Click the Switch button to switch between sides (left/right).</span>
+                      <span className='text-white/50 text-base font-light group'>3. Send a message, or <img src="assets/icons/photo_icon.png" className="w-auto mx-1 h-4 invert inline opacity-70" /> upload any image. You can click sent messages to <img src="assets/icons/edit_icon.png" className="w-auto mx-1 h-4 invert inline opacity-70" /> edit them, and hover over them to <img src="assets/icons/ZZZ_trash_icon.png" className="w-auto mx-1 h-4 grayscale inline opacity-100 group-hover:grayscale-0" /> delete them.</span>
                     </div>
+                    ): ( 
+                      <div className='flex flex-row align-middle self-center'>
+                        <img src="assets/media/EllenSticker01.png" alt='Sticker' className='h-40 w-auto' />
+                      </div>
+                    )}
+                    <button className='text-white bg-transparent outline-none focus:outline-none hover:outline-none border-none ' onClick={() => setShowHowtoUse(!ShowHowtoUse)}>
+                      {!ShowHowtoUse ? "So, how do I use it? ▲" : "▼ Okay, I got it!"}
+                    </button>
+                    <span className='text-white/80 text-base font-light mt-8'>
+                      {`${leftName === "Nicole Demara" || rightName === "Nicole Demara" ? " Profit ;)" : 
+                          leftName === "Anby Demara" || rightName === "Anby Demara" ? " Have a borgar!" : 
+                          leftName === "Fairy" || rightName === "Fairy" ? " Enjoy a high electricity bill!" : 
+                          leftName === "Grace Howard" || rightName === "Grace Howard" ? " Have fun with your machines!" : " Have fun!"}`}
+                    </span>
                   </div>
                 ) : (
                   messages.map((message, index) => (
