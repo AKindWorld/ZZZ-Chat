@@ -281,6 +281,7 @@ const App = () => {
   const [isSystemModalOpen, setIsSystemModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropDownExportOptionsOpen, setIsDropDownExportOptionsOpen] = useState(false);
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [WiderImageExportEnabled, setWiderImageExportEnabled] = useState(false);
 
@@ -310,6 +311,10 @@ const App = () => {
   const toggleDropDownExportOptions = () => {
     setIsDropDownExportOptionsOpen(!isDropDownExportOptionsOpen);
   };
+
+  const toggleAboutModal = () => {
+    setIsAboutModalOpen(!isAboutModalOpen);
+  }
 
   const addMessage = () => {
     if (!inputText.trim()) return;
@@ -983,7 +988,7 @@ const App = () => {
                     <span className="text-sm text-gray-500 sm:text-center">
                       
                     </span>
-                    <button className='rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]'>About</button>
+                    <button onClick={toggleAboutModal} className='rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]'>About</button>
                     <div className=''>
                       <button onClick={exportChat} className="rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]">Export Chat as Image</button>
                       <button onClick={toggleDropDownExportOptions} className="rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white outline-none focus:outline-none active:outline-none">
@@ -1072,6 +1077,41 @@ const App = () => {
                                 </div>
                               </li>
                             </ul>
+                          </div>
+                        </div>
+                      )}
+                      {isAboutModalOpen && (
+                        <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
+                          <div className="bg-black p-6 rounded-xl w-full m-4 md:w-3/5 md:m-0 z-10 absolute divide-y divide-gray-100 shadow text-left">
+                          <div className='flex items-center'>
+                            <h2 className="text-lg font-bold tracking-wider mb-4 text-white flex-grow">About</h2>
+                            <button onClick={toggleAboutModal} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
+                                <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
+                                  <path className="fill-[#BF2005] group-hover:fill-white" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fillOpacity="0.2"/>
+                                  <path className="fill-[#BF2005] group-hover:fill-white" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+                                  <path d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
+                                  <mask id="path-4-inside-1_832_899" fill="white">
+                                    <path d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
+                                  </mask>
+                                  <path className="group-hover:fill-[#BF2005]" d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z" fill="black"/>
+                                  <path className="group-hover:fill-[#BF2005]" d="M17.7707 11.828L16.3565 13.2422L17.7705 14.6563L19.1847 13.2424L17.7707 11.828ZM16.828 12.7707L18.2422 14.1849L19.6564 12.7707L18.2422 11.3565L16.828 12.7707ZM17.7707 13.7133L19.1847 12.299L17.7705 10.8851L16.3565 12.2991L17.7707 13.7133ZM18.714 12.7707L17.2998 11.3565L15.8856 12.7707L17.2998 14.1849L18.714 12.7707ZM20.128 16.0701L18.7139 17.4845L20.128 16.0701ZM14.4713 15.1273L13.0571 13.7131L14.4713 15.1273ZM18.7139 8.05687L16.3566 10.4136L19.1847 13.2424L21.542 10.8856L18.7139 8.05687ZM19.1849 10.4138L16.8282 8.05712L13.9998 10.8855L16.3565 13.2422L19.1849 10.4138ZM13.0571 11.8282L15.4138 14.1849L18.2422 11.3565L15.8855 8.99979L13.0571 11.8282ZM15.4138 11.3565L13.0571 13.7131L15.8855 16.5415L18.2422 14.1849L15.4138 11.3565ZM16.8282 17.4842L19.1849 15.1275L16.3565 12.2991L13.9998 14.6558L16.8282 17.4842ZM16.3566 15.1277L18.7139 17.4845L21.542 14.6557L19.1847 12.299L16.3566 15.1277ZM22.4849 13.7131L20.1282 11.3565L17.2998 14.1849L19.6564 16.5415L22.4849 13.7131ZM20.1282 14.1849L22.4849 11.8282L19.6564 8.99981L17.2998 11.3565L20.1282 14.1849ZM22.4849 17.4842C23.5262 16.4429 23.5262 14.7545 22.4849 13.7131L19.6564 16.5415C19.1357 16.0208 19.1357 15.1765 19.6564 14.6558L22.4849 17.4842ZM18.7139 17.4845C19.7553 18.5256 21.4436 18.5255 22.4849 17.4842L19.6564 14.6558C20.1771 14.1351 21.0213 14.1351 21.542 14.6557L18.7139 17.4845ZM13.0571 17.4842C14.0985 18.5256 15.7869 18.5256 16.8282 17.4842L13.9998 14.6558C14.5205 14.135 15.3648 14.135 15.8855 14.6558L13.0571 17.4842ZM13.0571 8.05712C12.0158 9.09848 12.0158 10.7869 13.0571 11.8282L15.8855 8.99979C16.4063 9.52052 16.4063 10.3648 15.8855 10.8855L13.0571 8.05712ZM16.8282 8.05712C15.7869 7.01576 14.0985 7.01576 13.0571 8.05712L15.8855 10.8855C15.3648 11.4063 14.5205 11.4063 13.9998 10.8855L16.8282 8.05712ZM13.0571 13.7131C12.0158 14.7545 12.0158 16.4429 13.0571 17.4842L15.8855 14.6558C16.4063 15.1765 16.4063 16.0208 15.8855 16.5415L13.0571 13.7131ZM22.4849 11.8282C23.5262 10.7869 23.5262 9.09846 22.4849 8.05709L19.6564 10.8855C19.1357 10.3648 19.1357 9.52054 19.6564 8.99981L22.4849 11.8282ZM21.542 10.8856C21.0213 11.4062 20.1771 11.4062 19.6564 10.8855L22.4849 8.05709C21.4436 7.0158 19.7553 7.01571 18.7139 8.05687L21.542 10.8856Z" fill="black" mask="url(#path-4-inside-1_832_899)"/>
+                                </svg>  
+                              </button>
+                            </div>
+                            <div className='flex flex-col'>
+                              <p className="text-white text-sm mt-4">
+                                A simple, but feature-rich chat simulation web-app for the DMs feature of the game Zenless Zone Zero.
+                              </p>
+                              <p className='text-white text-sm mt-4'>
+                                Made with Vite React SWC plugin, and TailwindCSS. Uses HTML2Canvas for image-exporting.
+                              </p>
+                              <div className='flex flex-row my-4'>
+                                <button className='rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]'>
+                                  GitHub
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       )}
