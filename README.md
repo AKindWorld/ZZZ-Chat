@@ -38,7 +38,7 @@ Made with [Vite](https://vite.dev) with [React SWC plugin](https://github.com/vi
 
 # Features
 
-<img src="https://github.com/user-attachments/assets/f3365e2f-36fc-49a9-b0ef-3ca32e2311b0" alt="AnbyPower" height="200" width="200" align="right"/>
+<img src="https://github.com/user-attachments/assets/f3365e2f-36fc-49a9-b0ef-3ca32e2311b0" alt="AnbyPower" height="auto" width="20%" align="right"/>
 
 
 * Send messages as any character, through any side of the messaging system (left/right).
@@ -68,7 +68,7 @@ DMs                     | Group Chat
 
 
 ## Get Started
-<img src="https://github.com/user-attachments/assets/641d506b-0a86-4a82-bc4d-dcd87d2fc60d" alt="BelleGift" height="200" width="200" align="right"/>
+<img src="https://github.com/user-attachments/assets/641d506b-0a86-4a82-bc4d-dcd87d2fc60d" alt="BelleGift" height="auto" width="20%" align="right"/>
 
 ### Online Version
 
@@ -87,7 +87,7 @@ Open it on your localhost port to access it.
 
 ## To-Do
 
-<img src="https://github.com/user-attachments/assets/ed5d38be-9591-43bf-8179-5d08cb6d5298" alt="ZhuYuanNote" height="200" width="200" align="right"/>
+<img src="https://github.com/user-attachments/assets/ed5d38be-9591-43bf-8179-5d08cb6d5298" alt="ZhuYuanNote" height="auto" width="20%" align="right"/>
 
 - [ ] re-write the App.jsx code completely to break it down to components (currently it's over 1000 lines dumped in one file).
 - [ ] add more system messages (like: `User is typing...`, choice blocks as in-game, Commission details, etc).
@@ -101,7 +101,7 @@ Open it on your localhost port to access it.
 
 ## Known Bugs
 
-<img src="https://github.com/user-attachments/assets/3823ead4-7065-4272-819f-1a9894ebdb61" alt="BillyCry" height="200" width="200" align="right"/>
+<img src="https://github.com/user-attachments/assets/3823ead4-7065-4272-819f-1a9894ebdb61" alt="BillyCry" height="auto" width="20%" align="right"/>
 
 - `Animated Background` doesn't work on mobile.
 - Using the `Wide Export` option on mobile makes height of the image extremely large, even for small chats.
@@ -111,7 +111,7 @@ Open it on your localhost port to access it.
 <br>
 
 ## Contributing
-<img src="https://github.com/user-attachments/assets/16f5d2ff-1134-4e8a-a9ac-cb5a0c8fba7e" alt="PiperGetOn" height="200" width="200" align="right"/>
+<img src="https://github.com/user-attachments/assets/16f5d2ff-1134-4e8a-a9ac-cb5a0c8fba7e" alt="PiperGetOn" height="auto" width="20%" align="right"/>
 
 - Code & Features: If you wanna contribute, please fork the repo & open a PR with your changes. 
 - Characters/NPC details: Please open a new issue with the characters' or NPCs' Name & Image/in-game profile pic, or DM me (see below).
@@ -121,7 +121,7 @@ Other than that, you can also help out by starring the repo. Thanks a lot ^^
 <br>
 
 ## Misc
-<img src="https://github.com/user-attachments/assets/46de1d2a-0b4f-495d-b932-be6d65a2213a" alt="CorinCute" height="200" width="200" align="right"/>
+<img src="https://github.com/user-attachments/assets/46de1d2a-0b4f-495d-b932-be6d65a2213a" alt="CorinCute" height="auto" width="20%" align="right"/>
 
 I made this as I was bored and realized there wasn't any chat simulation project for ZZZ yet (or maybe I didn't know any).
 <br>
