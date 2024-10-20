@@ -1082,7 +1082,7 @@ const App = () => {
                       )}
                       {isAboutModalOpen && (
                         <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
-                          <div className="bg-black p-6 rounded-xl w-full m-4 md:w-3/5 md:m-0 z-10 absolute divide-y divide-gray-100 shadow text-left">
+                          <div className="bg-black p-6 rounded-xl w-full m-4 md:w-1/2 md:m-0 z-10 absolute divide-y divide-gray-100 shadow text-left">
                           <div className='flex items-center'>
                             <h2 className="text-lg font-bold tracking-wider mb-4 text-white flex-grow">About</h2>
                             <button onClick={toggleAboutModal} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
@@ -1103,14 +1103,15 @@ const App = () => {
                               <p className="text-white text-sm mt-4">
                                 A simple, but feature-rich chat simulation web-app for the DMs feature of the game Zenless Zone Zero.
                               </p>
-                              <p className='text-white text-sm mt-4'>
+                              <p className='text-white text-sm my-4'>
                                 Made with Vite React SWC plugin, and TailwindCSS. Uses HTML2Canvas for image-exporting.
                               </p>
-                              <div className='flex flex-row my-4'>
-                                <button className='rounded-full bg-black border-4 border-gray-600 hover:border-[#c3c900] text-white px-6 py-2 outline-none focus:outline-[#c3c900] active:outline-[#c3c900]'>
-                                  GitHub
-                                </button>
-                              </div>
+                              <p className='text-gray-500 text-sm my-4'>
+                                [under construction]
+                              </p>
+                              <p className='text-white text-sm mt-4 mb-2'>
+                                For all features, to-dos, known-bugs and more, <a href='https://github.com/AKindWorld/ZZZ-Chat/blob/main/README.md'><span className='text-[#fadc00] hover:underline'>check out the GitHub README</span></a>.
+                              </p>
                             </div>
                           </div>
                         </div>
