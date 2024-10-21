@@ -145,15 +145,14 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
-      <div className="bg-black p-6 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg">
+    <div className="background_pattern fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
+      <div className="background_sliding_animation border-gray-400 border-2 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg">
         <div className="">
         {editingMessageIndex === null ? (
-          <div>
-            <div className='flex items-center mb-4'>
+          <div className=''>
+            <div className='flex items-center bg-black rounded-xl px-6 py-4'>
               <div className='flex flex-grow flex-col'>
                 <h2 className="text-lg font-bold tracking-wider text-white flex-grow">Select System Message</h2>
-                <span className='text-sm text-gray-400'>You will be able to customize the message</span>
               </div>
               <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
                   <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -168,31 +167,36 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
                     <path className="group-hover:fill-[#BF2005]" d="M17.7707 11.828L16.3565 13.2422L17.7705 14.6563L19.1847 13.2424L17.7707 11.828ZM16.828 12.7707L18.2422 14.1849L19.6564 12.7707L18.2422 11.3565L16.828 12.7707ZM17.7707 13.7133L19.1847 12.299L17.7705 10.8851L16.3565 12.2991L17.7707 13.7133ZM18.714 12.7707L17.2998 11.3565L15.8856 12.7707L17.2998 14.1849L18.714 12.7707ZM20.128 16.0701L18.7139 17.4845L20.128 16.0701ZM14.4713 15.1273L13.0571 13.7131L14.4713 15.1273ZM18.7139 8.05687L16.3566 10.4136L19.1847 13.2424L21.542 10.8856L18.7139 8.05687ZM19.1849 10.4138L16.8282 8.05712L13.9998 10.8855L16.3565 13.2422L19.1849 10.4138ZM13.0571 11.8282L15.4138 14.1849L18.2422 11.3565L15.8855 8.99979L13.0571 11.8282ZM15.4138 11.3565L13.0571 13.7131L15.8855 16.5415L18.2422 14.1849L15.4138 11.3565ZM16.8282 17.4842L19.1849 15.1275L16.3565 12.2991L13.9998 14.6558L16.8282 17.4842ZM16.3566 15.1277L18.7139 17.4845L21.542 14.6557L19.1847 12.299L16.3566 15.1277ZM22.4849 13.7131L20.1282 11.3565L17.2998 14.1849L19.6564 16.5415L22.4849 13.7131ZM20.1282 14.1849L22.4849 11.8282L19.6564 8.99981L17.2998 11.3565L20.1282 14.1849ZM22.4849 17.4842C23.5262 16.4429 23.5262 14.7545 22.4849 13.7131L19.6564 16.5415C19.1357 16.0208 19.1357 15.1765 19.6564 14.6558L22.4849 17.4842ZM18.7139 17.4845C19.7553 18.5256 21.4436 18.5255 22.4849 17.4842L19.6564 14.6558C20.1771 14.1351 21.0213 14.1351 21.542 14.6557L18.7139 17.4845ZM13.0571 17.4842C14.0985 18.5256 15.7869 18.5256 16.8282 17.4842L13.9998 14.6558C14.5205 14.135 15.3648 14.135 15.8855 14.6558L13.0571 17.4842ZM13.0571 8.05712C12.0158 9.09848 12.0158 10.7869 13.0571 11.8282L15.8855 8.99979C16.4063 9.52052 16.4063 10.3648 15.8855 10.8855L13.0571 8.05712ZM16.8282 8.05712C15.7869 7.01576 14.0985 7.01576 13.0571 8.05712L15.8855 10.8855C15.3648 11.4063 14.5205 11.4063 13.9998 10.8855L16.8282 8.05712ZM13.0571 13.7131C12.0158 14.7545 12.0158 16.4429 13.0571 17.4842L15.8855 14.6558C16.4063 15.1765 16.4063 16.0208 15.8855 16.5415L13.0571 13.7131ZM22.4849 11.8282C23.5262 10.7869 23.5262 9.09846 22.4849 8.05709L19.6564 10.8855C19.1357 10.3648 19.1357 9.52054 19.6564 8.99981L22.4849 11.8282ZM21.542 10.8856C21.0213 11.4062 20.1771 11.4062 19.6564 10.8855L22.4849 8.05709C21.4436 7.0158 19.7553 7.01571 18.7139 8.05687L21.542 10.8856Z" fill="black" mask="url(#path-4-inside-1_832_899)"/>
                   </svg>  
                 </button>
+            </div>
+            <div className='bg-gray-900/40 p-6'>
+              <div className='bg-black p-2 rounded-full mb-6 text-center'>
+                <span className='text-xs text-white/70'>You will be able to customize the message</span>
               </div>
-            <div className="grid grid-cols-1 gap-8">
-              {systemMessages.map((Message, index) => {
-                const Component = Message.component;
-                return (
-                  <button
-                    key={index}
-                    className="w-full p-2 rounded text-center hover:text-white border-0 hover:border-0 hover:outline-none focus:outline-none active:outline-none"
-                    onClick={() => handleSelectMessage(index)}
-                  >
-                    <Component {...Message.props} />
-                  </button>
-                );
-              })}
+              <div className="grid grid-cols-1 gap-8 place-items-center">
+                {systemMessages.map((Message, index) => {
+                  const Component = Message.component;
+                  return (
+                    <button
+                      key={index}
+                      className="w-[80%] p-2 rounded-xl text-center bg-gray-600/70 hover:text-white border-0 hover:border-0 hover:outline-none focus:outline-none active:outline-none"
+                      onClick={() => handleSelectMessage(index)}
+                    >
+                      <Component {...Message.props} />
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         ) : (
             <>
-              <div className="text-white flex flex-row items-center">
+              <div className="text-white flex flex-row items-center bg-black p-4 rounded-xl">
                 <button onClick={() => setEditingMessageIndex(null)} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
-                <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path className="group-hover:fill-[#BF2005]" d="M26.25 2H8.69062C4.83488 2 2.43011 6.17978 4.36808 9.51309L9.60826 18.5262C11.3985 21.6054 14.6915 23.5 18.2533 23.5H26.25C32.1871 23.5 37 18.6871 37 12.75C37 6.81294 32.1871 2 26.25 2Z" fill="black" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
-                  <path className="fill-[#BF2005] group-hover:fill-white" d="M15.076 10.0506C15.1517 10.2334 15.2799 10.3896 15.4444 10.4995C15.6088 10.6094 15.8022 10.668 16 10.668H22.6667V8.66797H18.414L19.0407 8.0413C19.2228 7.85261 19.3234 7.59996 19.321 7.33777C19.3186 7.07557 19.2133 6.82481 19.0278 6.63949C18.8424 6.45416 18.5915 6.34911 18.3293 6.34696C18.0671 6.34481 17.8145 6.44572 17.626 6.62797L15.2927 8.9613C15.1529 9.10113 15.0578 9.27924 15.0192 9.47312C14.9806 9.66701 15.0004 9.86798 15.076 10.0506Z" fill="#BF2005"/>
-                  <path className="fill-[#BF2005] group-hover:fill-white" fillRule="evenodd" clipRule="evenodd" d="M15.076 9.2853C15.1517 9.10255 15.2799 8.94636 15.4444 8.83647C15.6088 8.72659 15.8022 8.66795 16 8.66797H22.6667C23.9928 8.66797 25.2645 9.19475 26.2022 10.1324C27.1399 11.0701 27.6667 12.3419 27.6667 13.668C27.6667 14.9941 27.1399 16.2658 26.2022 17.2035C25.2645 18.1412 23.9928 18.668 22.6667 18.668H20.6667C20.4015 18.668 20.1471 18.5626 19.9596 18.3751C19.772 18.1875 19.6667 17.9332 19.6667 17.668C19.6667 17.4028 19.772 17.1484 19.9596 16.9609C20.1471 16.7733 20.4015 16.668 20.6667 16.668H22.6667C23.4623 16.668 24.2254 16.3519 24.788 15.7893C25.3506 15.2267 25.6667 14.4636 25.6667 13.668C25.6667 12.8723 25.3506 12.1093 24.788 11.5466C24.2254 10.984 23.4623 10.668 22.6667 10.668H18.414L19.0407 11.2946C19.2228 11.4833 19.3234 11.736 19.321 11.9982C19.3186 12.2604 19.2133 12.5111 19.0278 12.6965C18.8424 12.8818 18.5915 12.9868 18.3293 12.989C18.0671 12.9911 17.8145 12.8902 17.626 12.708L15.2927 10.3746C15.1529 10.2348 15.0578 10.0567 15.0192 9.86281C14.9806 9.66893 15.0004 9.46796 15.076 9.2853Z" fill="#BF2005"/>
-                </svg>
+                  <svg className="size-16 transition-all group" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path className="group-hover:fill-[#BF2005]" d="M26.25 2H8.69062C4.83488 2 2.43011 6.17978 4.36808 9.51309L9.60826 18.5262C11.3985 21.6054 14.6915 23.5 18.2533 23.5H26.25C32.1871 23.5 37 18.6871 37 12.75C37 6.81294 32.1871 2 26.25 2Z" fill="black" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
+                    <path className="fill-[#BF2005] group-hover:fill-white" d="M15.076 10.0506C15.1517 10.2334 15.2799 10.3896 15.4444 10.4995C15.6088 10.6094 15.8022 10.668 16 10.668H22.6667V8.66797H18.414L19.0407 8.0413C19.2228 7.85261 19.3234 7.59996 19.321 7.33777C19.3186 7.07557 19.2133 6.82481 19.0278 6.63949C18.8424 6.45416 18.5915 6.34911 18.3293 6.34696C18.0671 6.34481 17.8145 6.44572 17.626 6.62797L15.2927 8.9613C15.1529 9.10113 15.0578 9.27924 15.0192 9.47312C14.9806 9.66701 15.0004 9.86798 15.076 10.0506Z" fill="#BF2005"/>
+                    <path className="fill-[#BF2005] group-hover:fill-white" fillRule="evenodd" clipRule="evenodd" d="M15.076 9.2853C15.1517 9.10255 15.2799 8.94636 15.4444 8.83647C15.6088 8.72659 15.8022 8.66795 16 8.66797H22.6667C23.9928 8.66797 25.2645 9.19475 26.2022 10.1324C27.1399 11.0701 27.6667 12.3419 27.6667 13.668C27.6667 14.9941 27.1399 16.2658 26.2022 17.2035C25.2645 18.1412 23.9928 18.668 22.6667 18.668H20.6667C20.4015 18.668 20.1471 18.5626 19.9596 18.3751C19.772 18.1875 19.6667 17.9332 19.6667 17.668C19.6667 17.4028 19.772 17.1484 19.9596 16.9609C20.1471 16.7733 20.4015 16.668 20.6667 16.668H22.6667C23.4623 16.668 24.2254 16.3519 24.788 15.7893C25.3506 15.2267 25.6667 14.4636 25.6667 13.668C25.6667 12.8723 25.3506 12.1093 24.788 11.5466C24.2254 10.984 23.4623 10.668 22.6667 10.668H18.414L19.0407 11.2946C19.2228 11.4833 19.3234 11.736 19.321 11.9982C19.3186 12.2604 19.2133 12.5111 19.0278 12.6965C18.8424 12.8818 18.5915 12.9868 18.3293 12.989C18.0671 12.9911 17.8145 12.8902 17.626 12.708L15.2927 10.3746C15.1529 10.2348 15.0578 10.0567 15.0192 9.86281C14.9806 9.66893 15.0004 9.46796 15.076 9.2853Z" fill="#BF2005"/>
+                  </svg>
                 </button>
                 <span className='p-2 pl-4 text-lg font-bold tracking-wider text-white flex-grow'>Customize message</span>
                 <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none">
@@ -209,9 +213,13 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
                   </svg>  
                 </button>
               </div>
-              <input className="rounded-full bg-white text-gray-600 p-4 py-2 my-4 w-full" type="text" value={customMessage} onChange={e => setCustomMessage(e.target.value)} />
-              <div className='flex flex-row justify-between'>
-                <button onClick={handleSaveMessage} className="mt-4 animate-color-change text-black hover:tracking-wider p-2 rounded-full w-full">Okay</button>
+              <div className='flex flex-col p-6 bg-gray-900/40'>
+                <div className='flex flex-col bg-black p-4 rounded-lg'>
+                  <input className="rounded-full bg-gray-700/40 text-white p-4 py-2 my-4 w-full h-12 focus:outline-none ring-0 border-2 border-[#fadc00] focus:border-[#fadc00] focus:border-transparent resize-none" type="text" value={customMessage} onChange={e => setCustomMessage(e.target.value)} />
+                  <div className='flex flex-row justify-center'>
+                    <button onClick={handleSaveMessage} className="w-[30%] min-w-16 animate-color-change text-black hover:tracking-wider p-2l mt-8 -mb-8 px-4 rounded-full border-2 border-[#fadc00]/40 hover:border-transparent">Okay</button>
+                  </div>
+                </div>
               </div>
             </>
           )}
@@ -251,8 +259,8 @@ const EditMessageModal = ({ isOpen, onClose, onSave, messageContent }) => {
           </button>
         </div>
         <div className='flex flex-col p-6 bg-gray-900/40'>
-          <div className='bg-black p-4 rounded-full mb-4 text-center'>
-            <span className='text-white text-xs'>
+          <div className='bg-black p-2 rounded-full mb-4 text-center'>
+            <span className='text-white/70 text-xs'>
               Edit your message and press Enter or click Save.
             </span>
           </div>
