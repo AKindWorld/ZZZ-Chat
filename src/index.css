@@ -130,7 +130,7 @@ body > div:last-child > span + img {
   background-image: url("/assets/chatbox-point-l.png");
   position: absolute;
   left: -5px;
-  transform: translateY(-100%);
+  top: 15px;
   width: 8px;
   height: 8px;
   background-size: contain;
@@ -142,11 +142,38 @@ body > div:last-child > span + img {
   background-image: url("/assets/chatbox-point-r.png");
   position: absolute;
   right: -5px;
-  transform: translateY(-100%);
+  top: 15px;
   width: 8px;
   height: 8px;
   background-size: contain;
   background-repeat: no-repeat;
+}
+
+.background_pattern {
+  z-index: 1;
+}
+
+/* .background_pattern:before {
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: url("/assets/BG_background_long-stripes.png");
+  opacity: 0.1;
+} */
+
+.background_sliding_animation{
+  background: url("/assets/ZZZBackgroundSlidingAnim.png");
+  animation: bg-pattern-sliding-anim 10s linear infinite;
+}
+
+@keyframes bg-pattern-sliding-anim {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
 }
 
 
