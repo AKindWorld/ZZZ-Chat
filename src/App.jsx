@@ -120,6 +120,15 @@ const UserAddedMessage = ({ message }) => <div className='rounded-full p-2 px-4 
     </div>
   </div>;
 const UserSingleLineMessage = ({ message }) => <div className='text-gray-400'>{message}</div>;
+const UserFileUploadedMessage = ({ message }) => <div className='w-full rounded-xl p-2 px-4 text-white bg-gray-400'>
+    <span className='text-black'>
+      New File uploaded:
+    </span>
+    <br/>
+    <div className='bg-black text-gray-300 rounded-xl p-6 py-4 mt-2'>
+      {message}
+    </div>
+  </div>;
 
 const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
   const [customMessage, setCustomMessage] = useState('');
@@ -128,6 +137,7 @@ const SystemMessagesModal = ({ isOpen, onClose, onSelectMessage }) => {
   const systemMessages = [
     { component: UserAddedMessage, props: { message: `User added you` } },
     { component: UserSingleLineMessage, props: { message: '- History -' } },
+    { component: UserFileUploadedMessage, props: { message: `ImportantNotes.txt` } },
   ];
 
   const handleSelectMessage = (index) => {
@@ -278,8 +288,6 @@ const EditMessageModal = ({ isOpen, onClose, onSave, messageContent }) => {
               }}
             ></textarea>
             <button onClick={() => onSave(newContent)} className="w-[30%] min-w-16 self-center bg-[#fadc00] text-black mt-8 -mb-8 p-2 px-4 rounded-full border-2 border-[#fadc00]/40">Save</button>
-          </div>
-          <div className="mt-4 flex justify-end space-x-2">
           </div>
         </div>
       </div>
