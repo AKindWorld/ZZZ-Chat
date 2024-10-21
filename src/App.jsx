@@ -1155,11 +1155,17 @@ const App = () => {
                               <p className="text-white text-sm mt-4">
                                 A simple, but feature-rich chat simulation web-app for the DMs feature of the game Zenless Zone Zero.
                               </p>
-                              <p className='text-white text-sm my-4'>
-                                Made with Vite React SWC plugin, and TailwindCSS. Uses HTML2Canvas for image-exporting.
+                              <p className='text-gray-400 text-sm my-4'>
+                                Made with <a href='https://vite.dev/'><span className='text-white hover:underline'>Vite</span></a> <a href='https://github.com/vitejs/vite-plugin-react-swc'><span className='text-white hover:underline'>React SWC plugin</span></a>, and <a href='https://tailwindcss.com/'><span className='text-white hover:underline'>TailwindCSS</span></a>. Uses <a href='https://github.com/niklasvh/html2canvas'><span className='text-white hover:underline'>HTML2Canvas</span></a> for image-exporting.
                               </p>
                               <p className='text-gray-500 text-sm my-4'>
                                 [under construction]
+                              </p>
+                              <p className='text-gray-500 text-xs my-4'>
+                                • Character icons are taken from the <a href="https://zenless-zone-zero.fandom.com/wiki/"><span className='text-white hover:underline'>Zenless Zone Zero Wiki</span></a>. Huge thanks to all maintainers and contributors over there.<br/>
+                                • UI elements and icons recreated by me for this project (still ongoing). <br/>
+                                • Original design & character rights belong to miHoYo/HoYoVerse. <br/>
+                                • This is a fan project and is not affliated with miHoYo or HoYoVerse.
                               </p>
                               <p className='text-white text-sm mt-4 mb-2'>
                                 For all features, to-dos, known-bugs and more, <a href='https://github.com/AKindWorld/ZZZ-Chat/blob/main/README.md'><span className='text-[#fadc00] hover:underline'>check out the GitHub README</span></a>.
