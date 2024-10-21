@@ -149,6 +149,33 @@ body > div:last-child > span + img {
   background-repeat: no-repeat;
 }
 
+.background_pattern {
+  z-index: 1;
+}
+
+/* .background_pattern:before {
+  z-index: -1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  content: url("/assets/BG_background_long-stripes.png");
+  opacity: 0.1;
+} */
+
+.background_sliding_animation{
+  background: url("/assets/ZZZBackgroundSlidingAnim.png");
+  animation: bg-pattern-sliding-anim 10s linear infinite;
+}
+
+@keyframes bg-pattern-sliding-anim {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
 
 
   

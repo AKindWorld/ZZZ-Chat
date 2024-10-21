@@ -99,7 +99,7 @@ const CharacterModal = ({ isOpen, onClose, onSelectCharacter, side }) => {
             <div className="flex flex-col md:flex-row justify-center items-center bg-[#FFD613] p-2 rounded-lg mt-4">
               <img src="assets/media/CorinSticker01.png" alt="Corin Sticker" className="w-16 h-16 mx-2" />
               <p className='text-black px-4 text-sm md:text-md'>
-                If you want an Agent or NPC added permanently, please open an issue at the <a href='https://github.com/AKindWorld/ZZZ-Chat/issues'>Github Repo</a> or message me [Discord <span className='text-gray-700'>@auraolis</span> or Reddit <a href='https://reddit.com/u/FireWaterAirEarthMe'><span className='text-gray-700'>FireWaterAirEarthMe</span></a>]. 
+                Help me in adding more Agents & NPCs by opening an issue at the <a href='https://github.com/AKindWorld/ZZZ-Chat/issues'>Github Repo</a> or messaging me on Discord <span className='text-gray-700'>@auraolis</span>. Thanks a lot \^o^/ 
               </p>
             </div>
         </div>
@@ -232,24 +232,47 @@ const EditMessageModal = ({ isOpen, onClose, onSave, messageContent }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
-      <div className="bg-black p-6 rounded-lg w-full m-4 md:w-1/2 md:m-0 max-w-md">
-        <h2 className="text-xl mb-4 text-white tracking-wide">Edit Message</h2>
-        <textarea
-          className="w-full border p-2 rounded-lg bg-gray-600 text-white focus:outline-none ring-0 border-black"
-          rows="4"
-          value={newContent}
-          onChange={(e) => setNewContent(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              onSave(newContent);
-            }
-          }}
-        ></textarea>
-        <div className="mt-4 flex justify-end space-x-2">
-          <button onClick={onClose} className="bg-gray-500 text-white p-2 px-4 mx-2 rounded-full">Cancel</button>
-          <button onClick={() => onSave(newContent)} className="bg-[#fadc00] text-black p-2 px-4 rounded-full border-2 border-[#fadc00]/40">Save</button>
+    <div className="background_pattern fixed inset-0 bg-gray-900 bg-opacity-90 flex justify-center items-center z-50">
+      <div className=" background_sliding_animation border-gray-400 border-2 rounded-xl w-full m-4 md:w-1/2 md:m-0 max-w-lg">
+        <div className='flex flex-row items-center bg-black rounded-xl px-6 py-4'>
+          <h2 className="text-xl mb-4 text-white tracking-wide flex-grow">Edit Message</h2>
+          <button onClick={onClose} className="p-0 bg-transparent m-0 hover:border-0 border-0 focus:outline-none group">
+            <svg className="size-16 transition-all" width="39" height="25" viewBox="0 0 39 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path className="fill-[#BF2005] group-hover:fill-[#c3c900]" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="#BF2005"/>
+              <path className="fill-[#BF2005] group-hover:fill-[#c3c900]" d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" fill="black" fillOpacity="0.2"/>
+              <path className="fill-[#BF2005] group-hover:fill-[#c3c900] stroke-[#BF2005] group-hover:stroke-[#c3c900]" d="M30.2051 3H12.5C7.2533 3 3 7.25329 3 12.5C3 17.7467 7.2533 22 12.5 22H20.8149C23.9875 22 26.9258 20.3296 28.5485 17.6034L33.6422 9.04593C35.2293 6.37962 33.308 3 30.2051 3Z" stroke="black" strokeWidth="2" strokeLinecap="round"/>
+              <path className="fill-white group-hover:fill-[#c3c900] stroke-[#BF2005] group-hover:stroke-[#c3c900]"d="M12.5 2H30.2051C34.0837 2 36.4854 6.22452 34.5015 9.55741L29.4078 18.1148C27.6048 21.144 24.34 23 20.8149 23H12.5C6.70101 23 2 18.299 2 12.5C2 6.70101 6.70101 2 12.5 2Z" stroke="#BF2005" strokeWidth="3" strokeLinecap="round"/>
+              <mask id="path-4-inside-1_832_899" fill="white">
+                <path className="fill-black group-hover:white" d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z"/>
+              </mask>
+              <path className="group-hover:fill-white" d="M21.0706 9.47131C20.8103 9.211 20.3883 9.21098 20.128 9.47125L17.7707 11.828L15.414 9.47133C15.1537 9.21102 14.7316 9.21102 14.4713 9.47133V9.47133C14.211 9.73164 14.211 10.1537 14.4713 10.414L16.828 12.7707L14.4713 15.1273C14.211 15.3876 14.211 15.8097 14.4713 16.07V16.07C14.7316 16.3303 15.1537 16.3303 15.414 16.07L17.7707 13.7133L20.128 16.0701C20.3883 16.3304 20.8103 16.3303 21.0706 16.07V16.07C21.331 15.8097 21.331 15.3876 21.0706 15.1273L18.714 12.7707L21.0706 10.414C21.331 10.1537 21.331 9.73163 21.0706 9.47131V9.47131Z" fill="black"/>
+              <path className="group-hover:fill-[#c3c900]" d="M17.7707 11.828L16.3565 13.2422L17.7705 14.6563L19.1847 13.2424L17.7707 11.828ZM16.828 12.7707L18.2422 14.1849L19.6564 12.7707L18.2422 11.3565L16.828 12.7707ZM17.7707 13.7133L19.1847 12.299L17.7705 10.8851L16.3565 12.2991L17.7707 13.7133ZM18.714 12.7707L17.2998 11.3565L15.8856 12.7707L17.2998 14.1849L18.714 12.7707ZM20.128 16.0701L18.7139 17.4845L20.128 16.0701ZM14.4713 15.1273L13.0571 13.7131L14.4713 15.1273ZM18.7139 8.05687L16.3566 10.4136L19.1847 13.2424L21.542 10.8856L18.7139 8.05687ZM19.1849 10.4138L16.8282 8.05712L13.9998 10.8855L16.3565 13.2422L19.1849 10.4138ZM13.0571 11.8282L15.4138 14.1849L18.2422 11.3565L15.8855 8.99979L13.0571 11.8282ZM15.4138 11.3565L13.0571 13.7131L15.8855 16.5415L18.2422 14.1849L15.4138 11.3565ZM16.8282 17.4842L19.1849 15.1275L16.3565 12.2991L13.9998 14.6558L16.8282 17.4842ZM16.3566 15.1277L18.7139 17.4845L21.542 14.6557L19.1847 12.299L16.3566 15.1277ZM22.4849 13.7131L20.1282 11.3565L17.2998 14.1849L19.6564 16.5415L22.4849 13.7131ZM20.1282 14.1849L22.4849 11.8282L19.6564 8.99981L17.2998 11.3565L20.1282 14.1849ZM22.4849 17.4842C23.5262 16.4429 23.5262 14.7545 22.4849 13.7131L19.6564 16.5415C19.1357 16.0208 19.1357 15.1765 19.6564 14.6558L22.4849 17.4842ZM18.7139 17.4845C19.7553 18.5256 21.4436 18.5255 22.4849 17.4842L19.6564 14.6558C20.1771 14.1351 21.0213 14.1351 21.542 14.6557L18.7139 17.4845ZM13.0571 17.4842C14.0985 18.5256 15.7869 18.5256 16.8282 17.4842L13.9998 14.6558C14.5205 14.135 15.3648 14.135 15.8855 14.6558L13.0571 17.4842ZM13.0571 8.05712C12.0158 9.09848 12.0158 10.7869 13.0571 11.8282L15.8855 8.99979C16.4063 9.52052 16.4063 10.3648 15.8855 10.8855L13.0571 8.05712ZM16.8282 8.05712C15.7869 7.01576 14.0985 7.01576 13.0571 8.05712L15.8855 10.8855C15.3648 11.4063 14.5205 11.4063 13.9998 10.8855L16.8282 8.05712ZM13.0571 13.7131C12.0158 14.7545 12.0158 16.4429 13.0571 17.4842L15.8855 14.6558C16.4063 15.1765 16.4063 16.0208 15.8855 16.5415L13.0571 13.7131ZM22.4849 11.8282C23.5262 10.7869 23.5262 9.09846 22.4849 8.05709L19.6564 10.8855C19.1357 10.3648 19.1357 9.52054 19.6564 8.99981L22.4849 11.8282ZM21.542 10.8856C21.0213 11.4062 20.1771 11.4062 19.6564 10.8855L22.4849 8.05709C21.4436 7.0158 19.7553 7.01571 18.7139 8.05687L21.542 10.8856Z" fill="black" mask="url(#path-4-inside-1_832_899)"/>
+            </svg>  
+          </button>
+        </div>
+        <div className='flex flex-col p-6 bg-gray-900/40'>
+          <div className='bg-black p-4 rounded-full mb-4 text-center'>
+            <span className='text-white text-xs'>
+              Edit your message and press Enter or click Save.
+            </span>
+          </div>
+          <div className='flex flex-col bg-black p-4 rounded-lg'>
+            <textarea
+              className="w-full h-16 rounded-full bg-gray-700/40 text-white content-center focus:outline-none ring-0 border-2 border-[#fadc00] focus:border-[#fadc00] p-4 resize-none"
+              rows="4"
+              value={newContent}
+              onChange={(e) => setNewContent(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  onSave(newContent);
+                }
+              }}
+            ></textarea>
+            <button onClick={() => onSave(newContent)} className="w-[30%] min-w-16 self-center bg-[#fadc00] text-black mt-8 -mb-8 p-2 px-4 rounded-full border-2 border-[#fadc00]/40">Save</button>
+          </div>
+          <div className="mt-4 flex justify-end space-x-2">
+          </div>
         </div>
       </div>
     </div>
