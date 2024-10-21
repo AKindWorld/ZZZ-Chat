@@ -158,5 +158,50 @@
       "name": "Sage in a Barrel",
       "image": "assets/characters/npcs/SageInABarrel.png",
       "category": "NPCs"
+    },
+    {
+      "name": "Amy",
+      "image": "assets/characters/npcs/Amy.png",
+      "category": "NPCs"
+    },
+    {
+      "name": "Asha",
+      "image": "assets/characters/npcs/Asha.png",
+      "category": "NPCs"
+    },
+    {
+      "name": "Elfy",
+      "image": "assets/characters/npcs/Elfy.png",
+      "category": "NPCs"
+    },
+    {
+      "name": "Enzo",
+      "image": "assets/characters/npcs/Enzo.png",
+      "category": "NPCs"
+    },
+    {
+      "name": "Foamy",
+      "image": "assets/characters/npcs/Foamy.png",
+      "category": "NPCs"
+    },
+    {
+      "name": "Heddy",
+      "image": "assets/characters/npcs/Heddy.png",
+      "category": "NPCs"
+    },
+    {
+      "name": "Monica",
+      "image": "assets/characters/npcs/Monica.png",
+      "category": "NPCs"
+    },
+    {
+      "name": "Officer Mewmew",
+      "image": "assets/characters/npcs/OfficerMewmew.png",
+      "category": "NPCs"
+    },
+    {
+      "name": "Venus",
+      "image": "assets/characters/npcs/Venus.png",
+      "category": "NPCs"
     }
   ]
