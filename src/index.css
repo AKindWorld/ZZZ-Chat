@@ -130,7 +130,7 @@ body > div:last-child > span + img {
   background-image: url("/assets/chatbox-point-l.png");
   position: absolute;
   left: -5px;
-  transform: translateY(-100%);
+  top: 15px;
   width: 8px;
   height: 8px;
   background-size: contain;
@@ -142,7 +142,7 @@ body > div:last-child > span + img {
   background-image: url("/assets/chatbox-point-r.png");
   position: absolute;
   right: -5px;
-  transform: translateY(-100%);
+  top: 15px;
   width: 8px;
   height: 8px;
   background-size: contain;

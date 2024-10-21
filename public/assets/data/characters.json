@@ -81,7 +81,7 @@
     },
     {
       "name": "Seth Lowell",
-      "image": "assets/characters/SethLowell.png",
+      "image": "assets/characters/temp/SethLowell.png",
       "category": "Criminal Investigation Special Response Team"
     },
     {
@@ -138,5 +138,25 @@
       "name": "Hoshimi Miyabi",
       "image": "assets/characters/temp/HoshimiMiyabi.png",
       "category": "Unreleased"
+    },
+    {
+      "name": "Sjal",
+      "image": "assets/characters/npcs/Sjal1.png",
+      "category": "Sjal"
+    },
+    {
+      "name": "Sjal",
+      "image": "assets/characters/npcs/Sjal2.png",
+      "category": "Sjal"
+    },
+    {
+      "name": "Sjal",
+      "image": "assets/characters/npcs/Sjal3.png",
+      "category": "Sjal"
+    },
+    {
+      "name": "Sage in a Barrel",
+      "image": "assets/characters/npcs/SageInABarrel.png",
+      "category": "NPCs"
     }
   ]
